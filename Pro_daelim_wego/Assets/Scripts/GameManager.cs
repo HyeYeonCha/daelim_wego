@@ -11,14 +11,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private Text timeText; // 제한시간 반환
-    private float time = 5.0f; // 제한시간
+    private float time = 60.0f; // 제한시간
 
     private int randomLevel = 4; // 출력될 화살표의 클론수
     private bool gameOver = false; // 게임오버 체크
     private bool checkFlag = true; // 매 라운드 체크
 
-    private ArrayList CheckBlock = new ArrayList(); // 랜덤하게 생성될 ArrowClones들의 값 >> 태그로 저장
-    private ArrayList PlayrBlock = new ArrayList(); // 플레이어의 입력값 저장 
+    public List<string> CheckBlock = new List<string>(); // 랜덤하게 생성될 ArrowClones들의 값 >> 태그로 저장
+    public List<string> PlayerBlock = new List<string>(); // 플레이어의 입력값 저장 
 
     [SerializeField]
     private GameObject[] ArrowBlock; // 랜덤하게 생성할 Arrow들의 부모객체
@@ -43,16 +43,18 @@ public class GameManager : MonoBehaviour
                 randomLevel = Random.Range(3, 6);
                 randomIndex = Random.Range(0, 3);
                 SetBlock();
-                CheckArrow();
             }
-           
-            time -= Time.deltaTime;
+            else
+                PlayerCheck();
+
+                time -= Time.deltaTime;
 
             //timeText.text = "" + Mathf.Round(time);
             timeText.text = time.ToString("N0");
         }
+       
 
-        if(time <= 0)
+        if (time <= 0)
         {
             gameOver = true;
             time = 60;
@@ -62,17 +64,44 @@ public class GameManager : MonoBehaviour
     // 플레이어의 입력값 ArrayList와 랜덤으로 생성된 ArrowClone ArrayList의 각 인덱스 값 비교 후 점수 반환
     public void CheckArrow()
     {
-        
-        //if()
+        //for (int i = 0; i < PlayerBlock.Count; i++)
         //{
-        //    score += 100;
-        //    scoreText.text = "Score : " + score;
+        //    if (CheckBlock[i] == PlayerBlock[i])
+        //    {
+        //        Debug.Log("score ++ : " + score);
+        //        score += 100;
+        //        scoreText.text = "Score : "+ score;
+                
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("score -- : " + score);
+        //        score -= 100;
+        //        scoreText.text = "Score : " + score;
+                
+        //    }
         //}
-        //else
-        //{
-        //    score -= 100;
-        //    scoreText.text = "Score : " + score;
-        //}
+
+        while(PlayerBlock.Count == CheckBlock.Count)
+        {
+            int i = 0;
+            if (CheckBlock[i] == PlayerBlock[i])
+            {
+                Debug.Log("score ++ : " + score);
+                score += 100;
+                scoreText.text = "Score : " + score;
+                continue;
+
+            }
+            else
+            {
+                Debug.Log("score -- : " + score);
+                score -= 100;
+                scoreText.text = "Score : " + score;
+                continue;
+            }
+        }
+       
     }
 
     // 랜덤 인덱스를 이용한 클론 화살표 생성 (메뉴바에 생성)
@@ -82,17 +111,38 @@ public class GameManager : MonoBehaviour
         {
             GameObject cloneArrow = Instantiate(ArrowBlock[randomIndex], new Vector3(100 + (i * 80), 270, 0), Quaternion.identity);
             CheckBlock.Add(cloneArrow.tag);
-            cloneArrow.transform.parent = Arrowclones.transform;
+            cloneArrow.transform.SetParent(Arrowclones.transform);
             randomIndex = Random.Range(0, 3);
-            // Debug.Log(CheckBlock[i] + "생성");
+            Debug.Log(CheckBlock[i] + " 생성");
         }
         checkFlag = false;
+       
     }
 
     // 플레이어의 입력값 반환하여 ArrayList에 저장
     public void PlayerCheck()
     {
-
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            PlayerBlock.Add("LEFT");
+            CheckArrow();
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            PlayerBlock.Add("RIGHT");
+            CheckArrow();
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            PlayerBlock.Add("UP");
+            CheckArrow();
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            PlayerBlock.Add("DOWN");
+            CheckArrow();
+        }
+            
     }
 
 }
