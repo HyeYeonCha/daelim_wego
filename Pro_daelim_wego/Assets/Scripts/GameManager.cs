@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     private int randomLevel = 4;
     private int checkStart = 4;
     private bool gameOver = false;
+    private bool checkFlag = true;
 
     private ArrayList CheckBlock = new ArrayList();
     private ArrayList PlayrBlock = new ArrayList();
@@ -23,6 +24,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject[] ArrowBlock;
     private int randomIndex;
+
+    [SerializeField]
+    private GameObject Arrowclones;
 
     // Start is called before the first frame update
     void Start()
@@ -35,10 +39,14 @@ public class GameManager : MonoBehaviour
     {
         if (!gameOver)
         {
-            randomLevel = Random.Range(3, 6);
-            randomIndex = Random.Range(0, 3);
-            SetBlock();
-            CheckArrow();
+            if (checkFlag)
+            {
+                randomLevel = Random.Range(3, 6);
+                randomIndex = Random.Range(0, 3);
+                SetBlock();
+                CheckArrow();
+            }
+           
             time -= Time.deltaTime;
 
             //timeText.text = "" + Mathf.Round(time);
@@ -73,10 +81,12 @@ public class GameManager : MonoBehaviour
     {
         for (int i=0; i < randomLevel+1; i++)
         {
-            GameObject cloneArrow = Instantiate(ArrowBlock[randomIndex], new Vector3(-120, 0, 0), Quaternion.identity);
+            GameObject cloneArrow = Instantiate(ArrowBlock[randomIndex], new Vector3(100 + (i * 80), 270, 0), Quaternion.identity);
             CheckBlock.Add(cloneArrow);
+            cloneArrow.transform.parent = Arrowclones.transform;
             randomIndex = Random.Range(0, 3);
         }
+        checkFlag = false;
     }
 
 }
