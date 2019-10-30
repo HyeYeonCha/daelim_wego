@@ -82,25 +82,25 @@ public class GameManager : MonoBehaviour
         //    }
         //}
 
-        while(PlayerBlock.Count == CheckBlock.Count)
-        {
-            int i = 0;
-            if (CheckBlock[i] == PlayerBlock[i])
-            {
-                Debug.Log("score ++ : " + score);
-                score += 100;
-                scoreText.text = "Score : " + score;
-                continue;
+        //while(PlayerBlock.Count == CheckBlock.Count)
+        //{
+        //    int i = 0;
+        //    if (CheckBlock[i] == PlayerBlock[i])
+        //    {
+        //        Debug.Log("score ++ : " + score);
+        //        score += 100;
+        //        scoreText.text = "Score : " + score;
+        //        continue;
 
-            }
-            else
-            {
-                Debug.Log("score -- : " + score);
-                score -= 100;
-                scoreText.text = "Score : " + score;
-                continue;
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("score -- : " + score);
+        //        score -= 100;
+        //        scoreText.text = "Score : " + score;
+        //        continue;
+        //    }
+        //}
        
     }
 
