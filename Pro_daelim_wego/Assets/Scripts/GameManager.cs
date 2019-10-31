@@ -17,15 +17,26 @@ public class GameManager : MonoBehaviour
     private bool gameOver; // 게임오버(타임오버) 체크
     private bool removeFlag; // 매 라운드 게임오버 체크
 
-    public List<GameObject> CheckBlock = new List<GameObject>(); // 랜덤하게 생성될 ArrowClones들의 값 >> 태그로 저장
-    public List<string> PlayerBlock = new List<string>(); // 플레이어의 입력값 저장 
+    [SerializeField]
+    private List<GameObject> CheckBlock = new List<GameObject>(); // 랜덤하게 생성될 ArrowClones들의 값 >> 태그로 저장
+    [SerializeField]
+    private List<string> PlayerBlock = new List<string>(); // 플레이어의 입력값 저장 
+    [SerializeField]
+    private List<GameObject> BugerBlock = new List<GameObject>(); // 랜덤하게 생성할 BugerClone들의 오브젝트들
 
     [SerializeField]
-    private GameObject[] ArrowBlock; // 랜덤하게 생성할 Arrow들의 부모객체
+    private GameObject[] ArrowBlock; // 랜덤하게 생성할 Arrow들의 부모오브젝트
+    [SerializeField]
+    private GameObject[] PBugerBlock; // 랜덤하게 생성할 Buger들의 부모오브젝트
     private int randomIndex; // 부모 Arrow들을 랜덤하게 뽑을 인덱스
 
     [SerializeField]
-    private GameObject Arrowclones; // 하이어라키뷰에 clones들을 정리하기위한 부모오브젝트
+    private GameObject ArrowClones; // 하이어라키뷰에 ArrowClones들을 정리하기위한 부모오브젝트
+    [SerializeField]
+    private GameObject BugerClones; // 하이어라키뷰에 BugerClones들을 정리하기위한 부모오브젝트
+
+    [SerializeField]
+    private Rigidbody2D cloneBuger_rb; // 랜덤하게 생성된 BugerClones들의 Rigidbody2D
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +46,8 @@ public class GameManager : MonoBehaviour
 
         randomIndex = Random.Range(0, 3);
         SetBlock();
+        
+        cloneBuger_rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -87,7 +100,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    // 매 라운드마다 화살표 블럭 새로 생성해줌.
+    // 매 라운드마다 화살표 블럭과 버거블록을 새로 생성해줌.
     public void SetBlock()
     {
         randomLevel = Random.Range(3, 6);
@@ -96,8 +109,10 @@ public class GameManager : MonoBehaviour
         {
             randomIndex = Random.Range(0, 3);
             CheckBlock.Add(Instantiate(ArrowBlock[randomIndex], new Vector3(100 + (i * 80), 270, 0), Quaternion.identity) as GameObject);
-            CheckBlock[i].transform.SetParent(Arrowclones.transform);
-            Debug.Log(" 생성");
+            CheckBlock[i].transform.SetParent(ArrowClones.transform);
+            BugerBlock.Add(Instantiate(PBugerBlock[randomIndex], new Vector3(100 + (i * 80), 300, 0), Quaternion.identity) as GameObject);
+            cloneBuger_rb.isKinematic = false;
+            BugerBlock[i].transform.SetParent(BugerClones.transform);
         }
     }
 
