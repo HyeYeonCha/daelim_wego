@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
                         score += 100;
                         scoreText.text = "Score : " + score;
                         removeFlag = false;
+                        // 여기서 오류남 >> 너무 많은 버거 생성과 랜덤인덱스가 들어가질 않음. >> 다른 함수에 있는거라 
                         BugerBlock.Add(Instantiate(BugerPObject[randomIndex], new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject);
                         BugerBlock[i].transform.SetParent(BugerObjectClones.transform);
                     }
