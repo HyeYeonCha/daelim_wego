@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     }
 
     // 플레이어의 입력값 ArrayList와 랜덤으로 생성된 ArrowClone ArrayList의 각 인덱스 값 비교 후 점수 반환
-    public void CheckArrow()
+    public void ScoreCheck()
     {
         if (!removeFlag)
         {
@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+    // 매 라운드마다 화살표 블럭 새로 생성해줌.
     public void SetBlock()
     {
         randomLevel = Random.Range(3, 6);
@@ -100,6 +101,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 매 라운드가 끝날때마다 생성된 Arrow GameObject Clones을 없애줌.
     public void DestroyBlock()
     {
         for (int i = 0; i < randomLevel + 1; i++)
@@ -118,22 +120,22 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             PlayerBlock.Add("LEFT");
-            CheckArrow();
+            ScoreCheck();
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             PlayerBlock.Add("RIGHT");
-            CheckArrow();
+            ScoreCheck();
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             PlayerBlock.Add("UP");
-            CheckArrow();
+            ScoreCheck();
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             PlayerBlock.Add("DOWN");
-            CheckArrow();
+            ScoreCheck();
         }
     }
 }

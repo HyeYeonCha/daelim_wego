@@ -222,6 +222,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1629067626}
   timeText: {fileID: 817469779}
+  CheckBlock: []
+  PlayerBlock: []
   ArrowBlock:
   - {fileID: 1152044610287862565, guid: 7b2718c80ea7c9a4b87d0385ea4c8676, type: 3}
   - {fileID: 6038679381693279555, guid: 0b0d61b863c08374485db044cd870c1c, type: 3}
