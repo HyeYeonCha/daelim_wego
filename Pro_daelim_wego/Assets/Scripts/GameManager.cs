@@ -22,18 +22,24 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private List<string> PlayerBlock = new List<string>(); // 플레이어의 입력값 저장 
     [SerializeField]
-    private List<GameObject> BugerBlock = new List<GameObject>(); // 랜덤하게 생성할 BugerClone들의 오브젝트들
+    private List<GameObject> CanvasBugerBlock = new List<GameObject>(); // 랜덤하게 생성할 CnavasBugerClone들의 오브젝트들
+    [SerializeField]
+    private List<GameObject> BugerBlock = new List<GameObject>(); // 입력한 버거 값들 반환
 
     [SerializeField]
     private GameObject[] ArrowBlock; // 랜덤하게 생성할 Arrow들의 부모오브젝트
     [SerializeField]
-    private GameObject[] PBugerBlock; // 랜덤하게 생성할 Buger들의 부모오브젝트
+    private GameObject[] CanvasP_Buger; // 랜덤하게 생성할 Canvas안의 Buger들 이미지의 부모
+    [SerializeField]
+    private GameObject[] BugerPObject; // 랜덤하게 생성할 Buger들의 부모오브젝트
     private int randomIndex; // 부모 Arrow들을 랜덤하게 뽑을 인덱스
 
     [SerializeField]
     private GameObject ArrowClones; // 하이어라키뷰에 ArrowClones들을 정리하기위한 부모오브젝트
     [SerializeField]
-    private GameObject BugerClones; // 하이어라키뷰에 BugerClones들을 정리하기위한 부모오브젝트
+    private GameObject CanvasBugerClones; // 하이어라키뷰에 CanvasBugerClones들을 정리하기위한 부모오브젝트
+    [SerializeField]
+    private GameObject BugerObjectClones; // 하이어라키뷰에 Buger Clone Objects 들을 정리하기 위한 부모오브젝트
 
     // Start is called before the first frame update
     void Start()
@@ -81,6 +87,8 @@ public class GameManager : MonoBehaviour
                         score += 100;
                         scoreText.text = "Score : " + score;
                         removeFlag = false;
+                        BugerBlock.Add(Instantiate(BugerPObject[randomIndex], new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject);
+                        BugerBlock[i].transform.SetParent(BugerObjectClones.transform);
                     }
                     else
                     {
@@ -91,6 +99,7 @@ public class GameManager : MonoBehaviour
                         DestroyBlock();
                         return;
                     }
+                    
                 } else if(CheckBlock.Count < PlayerBlock.Count) // 플레이어의 입력값이 주어진 값보다 많아질때
                 {
                     DestroyBlock();
@@ -113,8 +122,8 @@ public class GameManager : MonoBehaviour
             randomIndex = Random.Range(0, 3);
             CheckBlock.Add(Instantiate(ArrowBlock[randomIndex], new Vector3(100 + (i * 80), 250, 0), Quaternion.identity) as GameObject);
             CheckBlock[i].transform.SetParent(ArrowClones.transform);
-            BugerBlock.Add(Instantiate(PBugerBlock[randomIndex], new Vector3(100 + (i * 80), 280, 0), Quaternion.identity) as GameObject);
-            BugerBlock[i].transform.SetParent(BugerClones.transform);
+            CanvasBugerBlock.Add(Instantiate(CanvasP_Buger[randomIndex], new Vector3(100 + (i * 80), 280, 0), Quaternion.identity) as GameObject);
+            CanvasBugerBlock[i].transform.SetParent(CanvasBugerClones.transform);
         }
     }
 
@@ -124,10 +133,13 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < randomLevel + 1; i++)
         {
             Destroy(CheckBlock[i]);
+            Destroy(CanvasBugerBlock[i]);
             Destroy(BugerBlock[i]);
         }
         CheckBlock.Clear();
         PlayerBlock.Clear();
+        CanvasBugerBlock.Clear();
+        BugerBlock.Clear();
         SetBlock();
         removeFlag = false;
     }
@@ -154,6 +166,13 @@ public class GameManager : MonoBehaviour
         {
             PlayerBlock.Add("DOWN");
             ScoreCheck();
+        }
+        if(CheckBlock.Count == PlayerBlock.Count)
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                DestroyBlock();
+            }
         }
     }
 }
