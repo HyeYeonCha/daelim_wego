@@ -35,9 +35,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject BugerClones; // 하이어라키뷰에 BugerClones들을 정리하기위한 부모오브젝트
 
-    [SerializeField]
-    private Rigidbody2D cloneBuger_rb; // 랜덤하게 생성된 BugerClones들의 Rigidbody2D
-
     // Start is called before the first frame update
     void Start()
     {
@@ -46,8 +43,6 @@ public class GameManager : MonoBehaviour
 
         randomIndex = Random.Range(0, 3);
         SetBlock();
-        
-        cloneBuger_rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -76,24 +71,32 @@ public class GameManager : MonoBehaviour
     {
         if (!removeFlag)
         {
-            for (int i = 0; i < PlayerBlock.Count; i++)
+            for (int i = 0; i < CheckBlock.Count; i++)
             {
-                if (CheckBlock[i].tag == PlayerBlock[i])
+                if(CheckBlock.Count >= PlayerBlock.Count)
                 {
-                    Debug.Log("score ++ : " + score);
-                    score += 100;
-                    scoreText.text = "Score : " + score;
-                    removeFlag = false;
-                }
-                else
+                    if (CheckBlock[i].tag == PlayerBlock[i])
+                    {
+                        Debug.Log("score ++ : " + score);
+                        score += 100;
+                        scoreText.text = "Score : " + score;
+                        removeFlag = false;
+                    }
+                    else
+                    {
+                        Debug.Log("score -- : " + score);
+                        score -= 100;
+                        scoreText.text = "Score : " + score;
+                        removeFlag = true;
+                        DestroyBlock();
+                        return;
+                    }
+                } else if(CheckBlock.Count < PlayerBlock.Count) // 플레이어의 입력값이 주어진 값보다 많아질때
                 {
-                    Debug.Log("score -- : " + score);
-                    score -= 100;
-                    scoreText.text = "Score : " + score;
-                    removeFlag = true;
                     DestroyBlock();
-                    return;
                 }
+                               
+                
             }
 
         }
@@ -108,10 +111,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < randomLevel + 1; i++)
         {
             randomIndex = Random.Range(0, 3);
-            CheckBlock.Add(Instantiate(ArrowBlock[randomIndex], new Vector3(100 + (i * 80), 270, 0), Quaternion.identity) as GameObject);
+            CheckBlock.Add(Instantiate(ArrowBlock[randomIndex], new Vector3(100 + (i * 80), 250, 0), Quaternion.identity) as GameObject);
             CheckBlock[i].transform.SetParent(ArrowClones.transform);
-            BugerBlock.Add(Instantiate(PBugerBlock[randomIndex], new Vector3(100 + (i * 80), 300, 0), Quaternion.identity) as GameObject);
-            cloneBuger_rb.isKinematic = false;
+            BugerBlock.Add(Instantiate(PBugerBlock[randomIndex], new Vector3(100 + (i * 80), 280, 0), Quaternion.identity) as GameObject);
             BugerBlock[i].transform.SetParent(BugerClones.transform);
         }
     }
@@ -122,6 +124,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < randomLevel + 1; i++)
         {
             Destroy(CheckBlock[i]);
+            Destroy(BugerBlock[i]);
         }
         CheckBlock.Clear();
         PlayerBlock.Clear();
