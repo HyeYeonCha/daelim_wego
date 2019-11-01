@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,33 +14,31 @@ public class GameManager : MonoBehaviour
     private Text timeText; // 제한시간 반환
     private float time = 60.0f; // 제한시간
 
-    private int randomLevel; // 출력될 화살표의 클론수
     private bool gameOver; // 게임오버(타임오버) 체크
     private bool removeFlag; // 매 라운드 게임오버 체크
 
-    [SerializeField]
-    private List<GameObject> CheckBlock = new List<GameObject>(); // 랜덤하게 생성될 ArrowClones들의 값 >> 태그로 저장
-    [SerializeField]
-    private List<string> PlayerBlock = new List<string>(); // 플레이어의 입력값 저장 
-    [SerializeField]
-    private List<GameObject> CanvasBugerBlock = new List<GameObject>(); // 랜덤하게 생성할 CnavasBugerClone들의 오브젝트들
-    [SerializeField]
-    private List<GameObject> BugerBlock = new List<GameObject>(); // 입력한 버거 값들 반환
+    private int randomindex; // 매 라운드 레시피의 종류를 랜덤 생성할 인덱스
+    private int randomLevel; // 매 라운드 레시피 개수 랜덤 생성할 인덱스
 
     [SerializeField]
-    private GameObject[] ArrowBlock; // 랜덤하게 생성할 Arrow들의 부모오브젝트
+    private List<GameObject> PlayerBuger = new List<GameObject>(); // 플레이어가 입력한 버거 재료들 저장 
     [SerializeField]
-    private GameObject[] CanvasP_Buger; // 랜덤하게 생성할 Canvas안의 Buger들 이미지의 부모
+    private List<GameObject> CompleteBuger = new List<GameObject>(); // 완성된 버거 저장
     [SerializeField]
-    private GameObject[] BugerPObject; // 랜덤하게 생성할 Buger들의 부모오브젝트
-    private int randomIndex; // 부모 Arrow들을 랜덤하게 뽑을 인덱스
+    private GameObject[] PBugerIng; // 버거 재료들의 부모객체
+
+    private float x, y = 0; // 커서의 좌표
 
     [SerializeField]
-    private GameObject ArrowClones; // 하이어라키뷰에 ArrowClones들을 정리하기위한 부모오브젝트
+    private GameObject[,] BugerIngredients = new GameObject[3,3]; // 버거 재료들의 고정 배열
+    
     [SerializeField]
-    private GameObject CanvasBugerClones; // 하이어라키뷰에 CanvasBugerClones들을 정리하기위한 부모오브젝트
+    private GameObject CompleteBugerClones; // 하이어라키뷰에 완성된 버거를 정리하기위한 부모오브젝트
     [SerializeField]
-    private GameObject BugerObjectClones; // 하이어라키뷰에 Buger Clone Objects 들을 정리하기 위한 부모오브젝트
+    private GameObject PlayerBugerClones; // 하이어라키뷰에 생성된 버거를 정리하기 위한 부모오브젝트
+
+    [SerializeField]
+    private GameObject Cursor;
 
     // Start is called before the first frame update
     void Start()
@@ -47,8 +46,16 @@ public class GameManager : MonoBehaviour
         gameOver = false;
         removeFlag = false;
 
-        randomIndex = Random.Range(0, 3);
-        SetBlock();
+        SetBuger();
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+
+            }
+        }
+
     }
 
     // Update is called once per frame
@@ -56,8 +63,7 @@ public class GameManager : MonoBehaviour
     {
         if (!gameOver)
         {
-            PlayerCheck();
-
+            PlayerCursor();
             time -= Time.deltaTime;
 
             //timeText.text = "" + Mathf.Round(time);
@@ -72,108 +78,134 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 플레이어의 입력값 ArrayList와 랜덤으로 생성된 ArrowClone ArrayList의 각 인덱스 값 비교 후 점수 반환
-    public void ScoreCheck()
+    // 플레이어가 생성한 버거 재료배열과 완성되어있던 버거 재료배열 비교후 점수 반환
+    public void ScorePlus()
     {
         if (!removeFlag)
         {
-            for (int i = 0; i < CheckBlock.Count; i++)
+            if (CompleteBuger.Last() == PlayerBuger.Last())
             {
-                if(CheckBlock.Count >= PlayerBlock.Count)
-                {
-                    if (CheckBlock[i].tag == PlayerBlock[i])
-                    {
-                        //Debug.Log("score ++ : " + score);
-                        score += 100;
-                        scoreText.text = "Score : " + score;
-                        removeFlag = false;
-                        // 여기서 오류남 >> 너무 많은 버거 생성과 랜덤인덱스가 들어가질 않음. >> 다른 함수에 있는거라 
-                        BugerBlock.Add(Instantiate(BugerPObject[randomIndex], new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject);
-                        BugerBlock[i].transform.SetParent(BugerObjectClones.transform);
-                    }
-                    else
-                    {
-                        Debug.Log("score -- : " + score);
-                        score -= 100;
-                        scoreText.text = "Score : " + score;
-                        removeFlag = true;
-                        DestroyBlock();
-                        return;
-                    }
-                    
-                } else if(CheckBlock.Count < PlayerBlock.Count) // 플레이어의 입력값이 주어진 값보다 많아질때
-                {
-                    DestroyBlock();
-                }
-                               
-                
+                score += 100;
+            }
+            else
+            {
+                removeFlag = true;
+                score -= 100;
+                DestroyBuger();
             }
 
         }
 
     }
 
-    // 매 라운드마다 화살표 블럭과 버거블록을 새로 생성해줌.
-    public void SetBlock()
+    // 매 라운드 랜덤한 버거 레시피 생성
+    public void SetBuger()
     {
         randomLevel = Random.Range(3, 6);
 
+        CompleteBuger.Add((Instantiate(PBugerIng[0], new Vector3(4, 3, 0), Quaternion.identity) as GameObject));
+        CompleteBuger[0].transform.SetParent(CompleteBugerClones.transform);
+
+        /* 11월 1일 정리 >> 게임 뒤엎었음 
+         * 오브젝트로 커서 이동시 이동한 객체 출력하기 >> 박스콜라이더 수정해서
+         * gameObject 삭제시키면 하나 남을것 같음 저거 버그 수정하기 (부모오브젝트로 하나가 안들어감)
+         * 점수 체크는 마지막에 엔터키 입력시 가능하도록 수정.
+         * 피버 만들어서 어느정도 점수가 오르고 게이지가 차면 엔터만으로도 버거 생성되도록 하는것 >> 이건 나중에 시간남으면...
+         */
         for (int i = 0; i < randomLevel + 1; i++)
         {
-            randomIndex = Random.Range(0, 3);
-            CheckBlock.Add(Instantiate(ArrowBlock[randomIndex], new Vector3(100 + (i * 80), 250, 0), Quaternion.identity) as GameObject);
-            CheckBlock[i].transform.SetParent(ArrowClones.transform);
-            CanvasBugerBlock.Add(Instantiate(CanvasP_Buger[randomIndex], new Vector3(100 + (i * 80), 280, 0), Quaternion.identity) as GameObject);
-            CanvasBugerBlock[i].transform.SetParent(CanvasBugerClones.transform);
+            //StartCoroutine(DelayBuger());
+            randomindex = Random.Range(2, 8);
+            CompleteBuger.Add((Instantiate(PBugerIng[randomindex], new Vector3(4, 5, 0+ (i * -0.1f)), Quaternion.identity) as GameObject));
+           // CompleteBuger[i]
+            CompleteBuger[i].transform.SetParent(CompleteBugerClones.transform);
+            
         }
+        StartCoroutine(LastBugerIngredient());
+    }
+
+    IEnumerator LastBugerIngredient ()
+    {
+        yield return new WaitForSeconds(1.5f);
+        CompleteBuger.Add((Instantiate(PBugerIng[1], new Vector3(4, 6, -2), Quaternion.identity) as GameObject));
+        Debug.Log(CompleteBuger.Count + " + 랜덤 >>" + randomLevel);
+        CompleteBuger[randomLevel + 2].transform.SetParent(CompleteBugerClones.transform);
+    }
+    IEnumerator DelayBuger()
+    {
+        yield return new WaitForSeconds(4f);
+        Debug.Log("Delay buger");
     }
 
     // 매 라운드가 끝날때마다 생성된 Arrow GameObject Clones을 없애줌.
-    public void DestroyBlock()
+    public void DestroyBuger()
     {
         for (int i = 0; i < randomLevel + 1; i++)
         {
-            Destroy(CheckBlock[i]);
-            Destroy(CanvasBugerBlock[i]);
-            Destroy(BugerBlock[i]);
+            Destroy(CompleteBuger[i]);
+            Destroy(PlayerBuger[i]);
         }
-        CheckBlock.Clear();
-        PlayerBlock.Clear();
-        CanvasBugerBlock.Clear();
-        BugerBlock.Clear();
-        SetBlock();
+        CompleteBuger.Clear();
+        PlayerBuger.Clear();
+        SetBuger();
         removeFlag = false;
     }
 
     // 플레이어의 입력값 반환하여 ArrayList에 저장
-    public void PlayerCheck()
+    public void PlayerCursor()
     {
+        x = Cursor.transform.position.x;
+        y = Cursor.transform.position.y;
+
+        if(Cursor.transform.position.x > 6)
+        {
+            Cursor.transform.position = new Vector3(6, y);
+        }
+        if (Cursor.transform.position.x < 2)
+        {
+            Cursor.transform.position = new Vector3(2, y);
+        }
+        if (Cursor.transform.position.y > -1)
+        {
+            Cursor.transform.position = new Vector3(x, -1.2f);
+        }
+        if (Cursor.transform.position.y < -2)
+        {
+            Cursor.transform.position = new Vector3(x, -2.8f);
+        }
+
+
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            PlayerBlock.Add("LEFT");
-            ScoreCheck();
+            Cursor.transform.position = new Vector3(x - 2, y);
+            Debug.Log(Cursor.transform.localPosition);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            PlayerBlock.Add("RIGHT");
-            ScoreCheck();
+
+            Cursor.transform.position = new Vector3(x + 2, y);
+            Debug.Log(Cursor.transform.localPosition);
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            PlayerBlock.Add("UP");
-            ScoreCheck();
+
+            Cursor.transform.position = new Vector3(x, y + 0.8f);
+            Debug.Log(Cursor.transform.localPosition);
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            PlayerBlock.Add("DOWN");
-            ScoreCheck();
+
+            Cursor.transform.position = new Vector3(x, y - 0.8f);
+            Debug.Log(Cursor.transform.localPosition);
         }
-        if(CheckBlock.Count == PlayerBlock.Count)
+        if (CompleteBuger.Count == PlayerBuger.Count)
         {
-            if(Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Return))
             {
-                DestroyBlock();
+                DestroyBuger();
+                ScorePlus();
             }
         }
+
     }
 }

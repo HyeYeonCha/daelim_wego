@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - RIGHT
+  - UP
+  - LEFT
+  - DOWN
   layers:
   - Default
   - TransparentFX
@@ -40,4 +44,31 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ingredient1
+    uniqueID: 3791053573
+    locked: 0
+  - name: Ingredient2
+    uniqueID: 9356125
+    locked: 0
+  - name: Ingredient3
+    uniqueID: 1739353659
+    locked: 0
+  - name: Ingredient4
+    uniqueID: 1881952563
+    locked: 0
+  - name: Ingredient5
+    uniqueID: 2311970193
+    locked: 0
+  - name: Ingredient6
+    uniqueID: 2917818403
+    locked: 0
+  - name: Ingredient7
+    uniqueID: 192834495
+    locked: 0
+  - name: Ingredient8
+    uniqueID: 508424747
+    locked: 0
+  - name: Ingredient9
+    uniqueID: 2976588569
     locked: 0
