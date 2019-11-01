@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (CheckBlock[i].tag == PlayerBlock[i])
                     {
-                        Debug.Log("score ++ : " + score);
+                        //Debug.Log("score ++ : " + score);
                         score += 100;
                         scoreText.text = "Score : " + score;
                         removeFlag = false;
