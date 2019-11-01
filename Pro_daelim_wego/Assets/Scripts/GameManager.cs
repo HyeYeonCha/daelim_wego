@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
         {
             for (int j = 0; j < 3; j++)
             {
-
+                BugerIngredients[i, j] = PBugerIng[i];
             }
         }
 
