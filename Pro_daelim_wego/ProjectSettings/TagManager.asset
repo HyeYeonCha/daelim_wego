@@ -4,19 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Base
-  - Top
-  - Meat
-  - Chicken
-  - Tomato
-  - Onions
-  - Cheese
-  - Ketchup
-  - Salad
-  - RIGHT
-  - UP
-  - LEFT
-  - DOWN
+  - Block
+  - Pivot
   - Ground
   layers:
   - Default
