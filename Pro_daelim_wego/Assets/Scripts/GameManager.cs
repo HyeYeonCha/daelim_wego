@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     private float time = 60.0f; // 제한시간
 
     private bool gameOver; // 게임오버(타임오버) 체크
-    private bool removeFlag; // 매 라운드 게임오버 체크
 
     private int randomindex; // 매 라운드 레시피의 종류를 랜덤 생성할 인덱스
     private int randomLevel; // 매 라운드 레시피 개수 랜덤 생성할 인덱스
@@ -29,8 +28,10 @@ public class GameManager : MonoBehaviour
 
     private float x, y = 0; // 커서의 좌표
 
+    private bool scoreflag; // 스코어 플래그 생성
+
     [SerializeField]
-    private GameObject[,] BugerIngredients = new GameObject[3,3]; // 버거 재료들의 고정 배열
+    private GameObject[,] BugerIngredients = new GameObject[4,4]; // 버거 재료들의 고정 배열
     
     [SerializeField]
     private GameObject CompleteBugerClones; // 하이어라키뷰에 완성된 버거를 정리하기위한 부모오브젝트
@@ -44,15 +45,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameOver = false;
-        removeFlag = false;
+        scoreflag = false;
 
         SetBuger();
-
-        for (int i = 0; i < 3; i++)
+        BugerIngredients.Initialize();
+        for (int i = 1; i < 4; i++)
         {
-            for (int j = 0; j < 3; j++)
+            for (int j = 1; j < 4; j++)
             {
-                BugerIngredients[i, j] = PBugerIng[i];
+                BugerIngredients[i, j] = PBugerIng[ (i-1)*3 + j-1];
             }
         }
 
@@ -70,7 +71,6 @@ public class GameManager : MonoBehaviour
             timeText.text = time.ToString("N0");
         }
 
-
         if (time <= 0)
         {
             gameOver = true;
@@ -81,19 +81,27 @@ public class GameManager : MonoBehaviour
     // 플레이어가 생성한 버거 재료배열과 완성되어있던 버거 재료배열 비교후 점수 반환
     public void ScorePlus()
     {
-        if (!removeFlag)
+        for (int i = 0; i < CompleteBuger.Count; i++)
         {
-            if (CompleteBuger.Last() == PlayerBuger.Last())
+            if (CompleteBuger[i].name == PlayerBuger[i].name)
             {
-                score += 100;
+                scoreflag = true;
             }
-            else
-            {
-                removeFlag = true;
-                score -= 100;
-                DestroyBuger();
-            }
+            else break;
+        }
 
+        if (scoreflag)
+        {
+            score += 100;
+            scoreText.text = "Score : " + score;
+            DestroyBuger();
+        }
+        else
+        {
+            scoreflag = false;
+            score -= 100;
+            scoreText.text = "Score : " + score;
+            DestroyBuger();
         }
 
     }
@@ -106,49 +114,41 @@ public class GameManager : MonoBehaviour
         CompleteBuger.Add((Instantiate(PBugerIng[0], new Vector3(4, 3, 0), Quaternion.identity) as GameObject));
         CompleteBuger[0].transform.SetParent(CompleteBugerClones.transform);
 
-        /* 11월 1일 정리 >> 게임 뒤엎었음 
-         * 오브젝트로 커서 이동시 이동한 객체 출력하기 >> 박스콜라이더 수정해서
-         * gameObject 삭제시키면 하나 남을것 같음 저거 버그 수정하기 (부모오브젝트로 하나가 안들어감)
-         * 점수 체크는 마지막에 엔터키 입력시 가능하도록 수정.
-         * 피버 만들어서 어느정도 점수가 오르고 게이지가 차면 엔터만으로도 버거 생성되도록 하는것 >> 이건 나중에 시간남으면...
-         */
         for (int i = 0; i < randomLevel + 1; i++)
         {
-            //StartCoroutine(DelayBuger());
             randomindex = Random.Range(2, 8);
             CompleteBuger.Add((Instantiate(PBugerIng[randomindex], new Vector3(4, 5, 0+ (i * -0.1f)), Quaternion.identity) as GameObject));
-           // CompleteBuger[i]
             CompleteBuger[i].transform.SetParent(CompleteBugerClones.transform);
-            
         }
+        CompleteBuger.Last().transform.SetParent(CompleteBugerClones.transform);
         StartCoroutine(LastBugerIngredient());
     }
 
+    // 마지막 뚜껑 재료 닫기 코루틴
     IEnumerator LastBugerIngredient ()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.2f);
         CompleteBuger.Add((Instantiate(PBugerIng[1], new Vector3(4, 6, -2), Quaternion.identity) as GameObject));
-        Debug.Log(CompleteBuger.Count + " + 랜덤 >>" + randomLevel);
-        CompleteBuger[randomLevel + 2].transform.SetParent(CompleteBugerClones.transform);
-    }
-    IEnumerator DelayBuger()
-    {
-        yield return new WaitForSeconds(4f);
-        Debug.Log("Delay buger");
+        CompleteBuger.Last().transform.SetParent(CompleteBugerClones.transform);
     }
 
     // 매 라운드가 끝날때마다 생성된 Arrow GameObject Clones을 없애줌.
     public void DestroyBuger()
     {
-        for (int i = 0; i < randomLevel + 1; i++)
+        for (int i = 0; i < PlayerBuger.Count; i++)
         {
-            Destroy(CompleteBuger[i]);
             Destroy(PlayerBuger[i]);
         }
+
+        for (int i = 0; i < CompleteBuger.Count; i++)
+        {
+            Destroy(CompleteBuger[i]);
+        }
+
         CompleteBuger.Clear();
         PlayerBuger.Clear();
+        scoreflag = false;
         SetBuger();
-        removeFlag = false;
     }
 
     // 플레이어의 입력값 반환하여 ArrayList에 저장
@@ -157,6 +157,7 @@ public class GameManager : MonoBehaviour
         x = Cursor.transform.position.x;
         y = Cursor.transform.position.y;
 
+        // 이동 범위 제한
         if(Cursor.transform.position.x > 6)
         {
             Cursor.transform.position = new Vector3(6, y);
@@ -167,44 +168,55 @@ public class GameManager : MonoBehaviour
         }
         if (Cursor.transform.position.y > -1)
         {
-            Cursor.transform.position = new Vector3(x, -1.2f);
+            Cursor.transform.position = new Vector3(x, -1f);
         }
         if (Cursor.transform.position.y < -2)
         {
-            Cursor.transform.position = new Vector3(x, -2.8f);
+            Cursor.transform.position = new Vector3(x, -3f);
         }
 
-
+        // 플레이어 커서 이동
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             Cursor.transform.position = new Vector3(x - 2, y);
-            Debug.Log(Cursor.transform.localPosition);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-
             Cursor.transform.position = new Vector3(x + 2, y);
-            Debug.Log(Cursor.transform.localPosition);
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-
-            Cursor.transform.position = new Vector3(x, y + 0.8f);
-            Debug.Log(Cursor.transform.localPosition);
+            Cursor.transform.position = new Vector3(x, y + 1f);
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-
-            Cursor.transform.position = new Vector3(x, y - 0.8f);
-            Debug.Log(Cursor.transform.localPosition);
+            Cursor.transform.position = new Vector3(x, y - 1f);
         }
-        if (CompleteBuger.Count == PlayerBuger.Count)
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                DestroyBuger();
-                ScorePlus();
-            }
+            StackBuger(x, y);
+        }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            ScorePlus();
+        }
+    }
+
+    // 플레이어 커서의 x,y 좌표를 받아 해당 위치에 일치하는 버거 재료들 생성
+    private void StackBuger(float _x, float _y)
+    {
+        int x = (int)Mathf.Round(_x);
+        int y = (int)Mathf.Round(_y);
+
+        PlayerBuger.Add(Instantiate(BugerIngredients[(x / 2), y * (-1)], new Vector3(-4, 4, 0), Quaternion.identity) as GameObject);
+        PlayerBuger.Last().transform.SetParent(PlayerBugerClones.transform);
+
+        // 버거의 최대개수 초과시 점수 감소후 새로운 레시피 불러오기
+        if(PlayerBuger.Count > 11)
+        {
+            score -= 200;
+            scoreText.text = "Score : " + score;
+            DestroyBuger();
         }
 
     }

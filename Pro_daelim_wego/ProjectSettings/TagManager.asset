@@ -4,10 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - RIGHT
-  - UP
-  - LEFT
-  - DOWN
+  - Base
+  - Top
+  - Meat
+  - Chicken
+  - Tomato
+  - Onions
+  - Cheese
+  - Ketchup
+  - Salad
   layers:
   - Default
   - TransparentFX
