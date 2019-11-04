@@ -13,6 +13,11 @@ TagManager:
   - Cheese
   - Ketchup
   - Salad
+  - RIGHT
+  - UP
+  - LEFT
+  - DOWN
+  - Ground
   layers:
   - Default
   - TransparentFX
