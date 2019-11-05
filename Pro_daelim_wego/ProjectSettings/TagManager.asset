@@ -4,9 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Block
-  - Pivot
   - Ground
+  - Ruby
   layers:
   - Default
   - TransparentFX

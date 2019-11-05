@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerControl : MonoBehaviour
 {
-    [SerializeField]
-    private float maxHeight; // 최대 점프 높이
-    [SerializeField]
-    private float minHeight; // 최소 높이
-
     [SerializeField]
     private float jumpForce; // 점프 높이
 
@@ -58,28 +54,34 @@ public class PlayerControl : MonoBehaviour
     // 플레이어 이동 함수
     public void PlyerController()
     {
-        if (transform.position.y < minHeight)
-        {
-            rd2.transform.position = new Vector2(-6f, minHeight);
-        }
-        if (Input.GetButtonDown("Fire1") && transform.position.y < maxHeight)
+        if (Input.GetButtonDown("Fire1") && rd2.velocity.y == 0)
         {
             rd2.velocity = new Vector2(0.0f, jumpForce);
         }
-    }
 
-    // 플레이어 충돌체크
-       private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Block")
+        if(transform.position.x < -9 || transform.position.y < -6)
         {
             gameOver = true;
             gameOverText.SetActive(true);
         }
-        if (collision.gameObject.tag == "Pivot")
+    }
+
+    // 플레이어 충돌체크
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Ruby")
         {
-            score += 100;
-            scoreText.text = "Score : " + score;
+            score ++;
+            scoreText.text = " " + score;
+            collision.gameObject.SetActive(false);
         }
     }
+    
+    // Replay
+    public void ReplayGame()
+    {
+        SceneManager.LoadScene("JumpGame");
+    }
+
+   
 }
