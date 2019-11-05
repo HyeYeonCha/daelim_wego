@@ -233,8 +233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHeight: 0
   minHeight: -4
-  minWidth: -6
-  maxWidth: 6
+  location_x: 8
 --- !u!4 &82648255 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3190196827753760378, guid: 4bd847a3b19037e49be369a6a5e8bd61,
@@ -254,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   randomSpeed: 0
-  staretPos: 5
+  staretPos: 15
   endPos: -8
   Ruby: {fileID: 1952135926}
 --- !u!1 &129820832
@@ -375,9 +374,10 @@ GameObject:
   - component: {fileID: 316064769}
   - component: {fileID: 316064768}
   - component: {fileID: 316064767}
+  - component: {fileID: 316064770}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -464,12 +464,28 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 316064766}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.42, y: -1.37, z: 0}
+  m_LocalPosition: {x: -1.1, y: -1.37, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 129820833}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &316064770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316064766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d6a89ea09cc9264d947b0e7d571d265, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  randomSpeed: 1
+  staretPos: 15
+  endPos: -10
+  Ruby: {fileID: 1696012337}
 --- !u!1 &608108909
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,8 +931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHeight: 4
   minHeight: -2
-  minWidth: -6
-  maxWidth: 6
+  location_x: 8
 --- !u!1001 &980896291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -994,6 +1009,16 @@ PrefabInstance:
       propertyPath: Ruby
       value: 
       objectReference: {fileID: 1696012337}
+    - target: {fileID: 6915284499360991286, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
+        type: 3}
+      propertyPath: endPos
+      value: -8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915284499360991286, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
+        type: 3}
+      propertyPath: staretPos
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 480846898179674574, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
         type: 3}
       propertyPath: speed
@@ -1004,80 +1029,18 @@ PrefabInstance:
       propertyPath: Ruby
       value: 
       objectReference: {fileID: 1696012337}
+    - target: {fileID: 480846898179674574, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
+        type: 3}
+      propertyPath: staretPos
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 480846898179674574, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
+        type: 3}
+      propertyPath: endPos
+      value: -8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1437b719e5cfac449aee39c4ccb2e9e7, type: 3}
---- !u!1 &1118246173
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1118246176}
-  - component: {fileID: 1118246175}
-  - component: {fileID: 1118246174}
-  m_Layer: 0
-  m_Name: EndPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1118246174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118246173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b297afc12e5281f42917aeb2273d28a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Ruby1: {fileID: 1696012337}
-  Ruby2: {fileID: 1952135926}
---- !u!61 &1118246175
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118246173}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -8.5, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 10}
-  m_EdgeRadius: 0
---- !u!4 &1118246176
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118246173}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1351798071
 GameObject:
   m_ObjectHideFlags: 0
@@ -1371,8 +1334,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHeight: 4
   minHeight: 0
-  minWidth: -6
-  maxWidth: 6
+  location_x: 8
 --- !u!4 &1405509814 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3190196827753760378, guid: 4bd847a3b19037e49be369a6a5e8bd61,
@@ -1392,7 +1354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   randomSpeed: 0
-  staretPos: 5
+  staretPos: 15
   endPos: -8
   Ruby: {fileID: 1696012337}
 --- !u!1 &1436081459
@@ -1554,7 +1516,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1585483455}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.52, y: -0.23, z: 0}
+  m_LocalPosition: {x: -1.4599999, y: -0.23, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1572,7 +1534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca47a57b9fdd9149abdb99beda1cc8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 8
+  jumpForce: 10
   scoreText: {fileID: 2003190738}
   timeText: {fileID: 871293740}
   gameOver: 0
@@ -1674,8 +1636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHeight: 4
   minHeight: -4
-  minWidth: -6
-  maxWidth: 6
+  location_x: 8
 --- !u!1 &1952135926 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4186314683574600012, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
@@ -1696,8 +1657,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHeight: 4
   minHeight: -4
-  minWidth: -6
-  maxWidth: 6
+  location_x: 8
 --- !u!1 &2003190736
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,7 +1858,7 @@ PrefabInstance:
     - target: {fileID: 5580833176517370968, guid: 81a9e1317a24ef64ca3c5ebe048c323d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.52
+      value: -1.4599999
       objectReference: {fileID: 0}
     - target: {fileID: 5580833176517370968, guid: 81a9e1317a24ef64ca3c5ebe048c323d,
         type: 3}
@@ -2029,6 +1989,16 @@ PrefabInstance:
       propertyPath: Ruby
       value: 
       objectReference: {fileID: 1952135926}
+    - target: {fileID: 6915284499360991286, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
+        type: 3}
+      propertyPath: endPos
+      value: -8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915284499360991286, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
+        type: 3}
+      propertyPath: staretPos
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 480846898179674574, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
         type: 3}
       propertyPath: Ruby
@@ -2038,6 +2008,16 @@ PrefabInstance:
         type: 3}
       propertyPath: speed
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 480846898179674574, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
+        type: 3}
+      propertyPath: staretPos
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 480846898179674574, guid: 1437b719e5cfac449aee39c4ccb2e9e7,
+        type: 3}
+      propertyPath: endPos
+      value: -8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1437b719e5cfac449aee39c4ccb2e9e7, type: 3}
@@ -2061,5 +2041,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHeight: 4
   minHeight: -4
-  minWidth: -6
-  maxWidth: 6
+  location_x: 8

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+// 내일 할 일 >> 햄버거 생성 좌표 수정해야함.!!
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
             for (int j = 1; j < 4; j++)
             {
                 BugerIngredients[i, j] = PBugerIng[ (i-1)*3 + j-1];
+                Instantiate(BugerIngredients[i, j], new Vector3(i, j), Quaternion.identity);
             }
         }
 
@@ -87,7 +89,10 @@ public class GameManager : MonoBehaviour
             {
                 scoreflag = true;
             }
-            else break;
+            else {
+                scoreflag = false;
+                break;
+            }
         }
 
         if (scoreflag)
@@ -98,7 +103,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            scoreflag = false;
             score -= 100;
             scoreText.text = "Score : " + score;
             DestroyBuger();
@@ -111,13 +115,15 @@ public class GameManager : MonoBehaviour
     {
         randomLevel = Random.Range(3, 6);
 
-        CompleteBuger.Add((Instantiate(PBugerIng[0], new Vector3(4, 3, 0), Quaternion.identity) as GameObject));
+        CompleteBuger.Add((Instantiate(PBugerIng[0], CompleteBugerClones.transform.position, Quaternion.identity) as GameObject));
+        CompleteBuger[0].gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
         CompleteBuger[0].transform.SetParent(CompleteBugerClones.transform);
 
         for (int i = 0; i < randomLevel + 1; i++)
         {
             randomindex = Random.Range(2, 8);
-            CompleteBuger.Add((Instantiate(PBugerIng[randomindex], new Vector3(4, 5, 0+ (i * -0.1f)), Quaternion.identity) as GameObject));
+            CompleteBuger.Add((Instantiate(PBugerIng[randomindex], CompleteBugerClones.transform.position, Quaternion.identity) as GameObject));
+            CompleteBuger[i].gameObject.GetComponent<SpriteRenderer>().sortingOrder = i + 2;
             CompleteBuger[i].transform.SetParent(CompleteBugerClones.transform);
         }
         CompleteBuger.Last().transform.SetParent(CompleteBugerClones.transform);
@@ -128,7 +134,7 @@ public class GameManager : MonoBehaviour
     IEnumerator LastBugerIngredient ()
     {
         yield return new WaitForSeconds(1.2f);
-        CompleteBuger.Add((Instantiate(PBugerIng[1], new Vector3(4, 6, -2), Quaternion.identity) as GameObject));
+        CompleteBuger.Add((Instantiate(PBugerIng[1], CompleteBugerClones.transform.position, Quaternion.identity) as GameObject));
         CompleteBuger.Last().transform.SetParent(CompleteBugerClones.transform);
     }
 
@@ -154,43 +160,22 @@ public class GameManager : MonoBehaviour
     // 플레이어의 입력값 반환하여 ArrayList에 저장
     public void PlayerCursor()
     {
-        x = Cursor.transform.position.x;
-        y = Cursor.transform.position.y;
-
-        // 이동 범위 제한
-        if(Cursor.transform.position.x > 6)
-        {
-            Cursor.transform.position = new Vector3(6, y);
-        }
-        if (Cursor.transform.position.x < 2)
-        {
-            Cursor.transform.position = new Vector3(2, y);
-        }
-        if (Cursor.transform.position.y > -1)
-        {
-            Cursor.transform.position = new Vector3(x, -1f);
-        }
-        if (Cursor.transform.position.y < -2)
-        {
-            Cursor.transform.position = new Vector3(x, -3f);
-        }
-
         // 플레이어 커서 이동
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            Cursor.transform.position = new Vector3(x - 2, y);
+            Cursor.transform.position += Vector3.left;
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            Cursor.transform.position = new Vector3(x + 2, y);
+            Cursor.transform.position += Vector3.right;
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            Cursor.transform.position = new Vector3(x, y + 1f);
+            Cursor.transform.position += Vector3.up;
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            Cursor.transform.position = new Vector3(x, y - 1f);
+            Cursor.transform.position += Vector3.down;
         }
         if(Input.GetKeyDown(KeyCode.Space))
         {
@@ -205,10 +190,8 @@ public class GameManager : MonoBehaviour
     // 플레이어 커서의 x,y 좌표를 받아 해당 위치에 일치하는 버거 재료들 생성
     private void StackBuger(float _x, float _y)
     {
-        int x = (int)Mathf.Round(_x);
-        int y = (int)Mathf.Round(_y);
-
-        PlayerBuger.Add(Instantiate(BugerIngredients[(x / 2), y * (-1)], new Vector3(-4, 4, 0), Quaternion.identity) as GameObject);
+        PlayerBuger.Add(Instantiate(BugerIngredients[(int)_x, (int)_y], PlayerBugerClones.transform.position, Quaternion.identity) as GameObject);
+        PlayerBuger.Last().gameObject.GetComponent<SpriteRenderer>().sortingOrder = PlayerBuger.Count;
         PlayerBuger.Last().transform.SetParent(PlayerBugerClones.transform);
 
         // 버거의 최대개수 초과시 점수 감소후 새로운 레시피 불러오기

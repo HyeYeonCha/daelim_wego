@@ -56,7 +56,8 @@ public class PlayerControl : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && rd2.velocity.y == 0)
         {
-            rd2.velocity = new Vector2(0.0f, jumpForce);
+            rd2.velocity = new Vector2(0.5f, jumpForce);
+
         }
 
         if(transform.position.x < -9 || transform.position.y < -6)

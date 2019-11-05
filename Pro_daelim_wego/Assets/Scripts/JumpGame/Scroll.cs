@@ -24,15 +24,18 @@ public class Scroll : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(-1 * randomSpeed * Time.deltaTime, 0, 0);
-        if(transform.position.x <= endPos)
+        if (gameObject.tag == "Ground" || gameObject.tag == "Ruby")
         {
-            transform.Translate(-1 * (endPos - staretPos), 0, 0);
-            if(gameObject.tag == "Ground" || gameObject.tag == "Ruby")
+            transform.Translate(-1 * randomSpeed * Time.deltaTime, 0, 0);
+            if (transform.position.x <= endPos)
             {
+                transform.Translate(-1 * (endPos - staretPos), 0, 0);
+
                 Ruby.SetActive(true);
-                gameObject.SendMessage("ChangeLocation", SendMessageOptions.RequireReceiver);
+                
                 randomSpeed = Random.Range(2.0f, 6.0f);
+
+                gameObject.SendMessage("ChangeLocation", SendMessageOptions.DontRequireReceiver);
             }
         }
     }

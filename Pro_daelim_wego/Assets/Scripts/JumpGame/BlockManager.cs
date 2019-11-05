@@ -9,9 +9,8 @@ public class BlockManager : MonoBehaviour
     [SerializeField]
     private float minHeight; // Ground 최소 높이
     [SerializeField]
-    private float minWidth; // Ground 랜덤 최소 x 좌표
-    [SerializeField]
-    private float maxWidth; // Ground 랜덤 최대 x 좌표
+    private float location_x; // Ground x 좌표
+  
 
     // Start is called before the first frame update
     void Start()
@@ -27,8 +26,8 @@ public class BlockManager : MonoBehaviour
 
     private void ChangeLocation()
     {
-        float randomWidth = Random.Range(minWidth, maxWidth);
+        
         float height = Random.Range(minHeight, maxHeight);
-        transform.localPosition = new Vector3(randomWidth, height, 0.0f);
+        transform.localPosition = new Vector3(location_x, height, 0.0f);
     }
 }
