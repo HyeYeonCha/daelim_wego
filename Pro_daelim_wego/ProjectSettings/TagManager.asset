@@ -6,6 +6,15 @@ TagManager:
   tags:
   - Ground
   - Ruby
+  - Salad
+  - Onions
+  - Meat
+  - Chicken
+  - Base
+  - Top
+  - Ketchup
+  - Cheese
+  - Tomato
   layers:
   - Default
   - TransparentFX
