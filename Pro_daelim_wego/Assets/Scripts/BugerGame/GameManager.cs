@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject Cursor; // 플레이어 커서
+    Vector3 currentPosition; // 커서의 현재 좌표
+    Vector3 nextPositon; // 커서가 다음 이동할 좌표
 
     [SerializeField]
     private GameObject GameOverImg; // 게임오버 이미지
@@ -148,7 +150,7 @@ public class GameManager : MonoBehaviour
         for (int i = 1; i < randomLevel + 1; i++)
         {
             randomindex = Random.Range(2, 8);
-            CompleteBuger.Add((Instantiate(PBugerIng[randomindex], CompleteBugerClones.transform.position + new Vector3(0, i), Quaternion.identity) as GameObject));
+            CompleteBuger.Add((Instantiate(PBugerIng[randomindex], CompleteBugerClones.transform.position + new Vector3(0, i * 1.5f), Quaternion.identity) as GameObject));
             CompleteBuger[i].gameObject.GetComponent<SpriteRenderer>().sortingOrder = i + 1;
             CompleteBuger[i].transform.SetParent(CompleteBugerClones.transform);
         }
@@ -182,27 +184,41 @@ public class GameManager : MonoBehaviour
         x = Mathf.Round(Cursor.transform.position.x);
         y = Mathf.Round(Cursor.transform.position.y) + 3;
 
-        //// 다음 좌표 받아와서 체크 하는 것 부터 해야함.
-        //Vector3 currentePosition = new Vector3(x, y);
-        //Vector3 nextPosition = currentePosition + 
-        
+        currentPosition = Cursor.transform.position;
+
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            Cursor.transform.position += Vector3.left;
+            nextPositon = currentPosition + Vector3.left;
+            Cursor.transform.position = nextPositon;
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            Cursor.transform.position += Vector3.right;
+            nextPositon = currentPosition + Vector3.right;
+            Cursor.transform.position = nextPositon;
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            Cursor.transform.position += Vector3.up;
+            nextPositon = currentPosition + Vector3.up;
+            Cursor.transform.position = nextPositon;
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            Cursor.transform.position += Vector3.down;
+            nextPositon = currentPosition + Vector3.down;
+            Cursor.transform.position = nextPositon;
         }
-        if(Input.GetKeyDown(KeyCode.Space))
+
+        if (nextPositon.x <= 1 || nextPositon.y <= -2 || nextPositon.x > BugerIngredients.Length / 4 || nextPositon.y > 1)
+        {
+            nextPositon = currentPosition;
+            Cursor.transform.position = currentPosition;
+            return;
+        }
+        else
+        {
+            Cursor.transform.position = nextPositon;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             StackBuger();
         }
