@@ -1,28 +1,23 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
-public class ClickItem : MonoBehaviour
+public class ClickItem : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler
 {
-    [SerializeField]
-    private GameObject countMessage;
-
     // Start is called before the first frame update
     void Start()
     {
-        countMessage.SetActive(false);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         ItemClick();
-        PurchaseItem();
     }
 
     public void ItemClick()
     {
-        Vector3 mousePos = Input.mousePosition;
-
-
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -36,24 +31,13 @@ public class ClickItem : MonoBehaviour
         }
     }
 
-    private void PurchaseItem()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if(Input.GetMouseButtonDown(1))
-        {
-            // 구매 메서드
-            Debug.Log("구매");
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                // 다중 구매 메서드
-                countMessage.SetActive(true);
-                Debug.Log("다중 구매");
-            }
-        }
-        if (Input.GetKey(KeyCode.Escape)) ;
-        
+        Debug.Log("Click : " + gameObject.name);
     }
 
-
-
-   
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("Click : " + gameObject.name);
+    }
 }
