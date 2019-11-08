@@ -1937,7 +1937,7 @@ GameObject:
   - component: {fileID: 1099745949}
   - component: {fileID: 1099745948}
   m_Layer: 5
-  m_Name: Mesege
+  m_Name: Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
