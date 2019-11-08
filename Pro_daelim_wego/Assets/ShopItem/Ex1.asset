@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Ex1
   m_EditorClassIdentifier: 
   itemName: Ex1
-  sprite: {fileID: 21300000, guid: 881f8e3bc93585c4c9a123ff5d882ae7, type: 3}
-  cost: 100
-  explain: "\uAE30\uBCF8 HP \uBB3C\uC57D"
+  itemSprite: {fileID: 21300000, guid: 881f8e3bc93585c4c9a123ff5d882ae7, type: 3}
+  itemCost: 100
+  itemDesc: "\uAE30\uBCF8 HP \uBB3C\uC57D"
