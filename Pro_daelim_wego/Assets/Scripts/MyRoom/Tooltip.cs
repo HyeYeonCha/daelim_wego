@@ -34,17 +34,14 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log(gameObject.name);
         toolTip.SetActive(true);
         toolTip.transform.position = new Vector2(MousPosition.x-1f, MousPosition.y-1f); // >> 툴팁의 포지션을 마우스 좌표의 옆으로 바꿔주기
         toolTipTextString = "" + item.ItemInfo.itemDesc;
         toolTipTextUI.text = toolTipTextString;
-        Debug.Log("On");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         toolTip.SetActive(false);
-        Debug.Log("Off");
     }
 }

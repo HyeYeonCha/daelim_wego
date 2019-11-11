@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections;
 
 public class ClickItem : MonoBehaviour
 {
@@ -11,6 +12,15 @@ public class ClickItem : MonoBehaviour
     private Text Ruby; // 코인 UI
     [SerializeField]
     private int rubyCoin; // 코인 갯수
+    [SerializeField]
+    private GameObject warningText; // 돈이 부족할때 뜨는 메세지
+    [SerializeField]
+    private Text buttonText; // 대량구매시 누르는 버튼의 text;
+    [SerializeField]
+    private InputField inputCount; // 대량 구매시 입력하는 아이템의 갯수;
+
+    private int multiplePrice; // 대량 구매시 저장할 아이템의 가격
+
     Ray ray;
     RaycastHit2D hit;
     Vector3 mousePos;
@@ -19,12 +29,13 @@ public class ClickItem : MonoBehaviour
     void Start()
     {
         countMessage.SetActive(false);
+        inputCount.characterLimit = 3;
+        warningText.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        ItemClick();
         PurchaseItem();
 
         Ruby.text = " : " + rubyCoin;
@@ -33,51 +44,62 @@ public class ClickItem : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
     }
-
-    public void ItemClick()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (hit.collider != null)
-            {
-                Debug.Log(hit.collider.gameObject.name);
-            }
-        }
-    }
-
+   
     private void PurchaseItem()
     {
         if (Input.GetMouseButtonDown(1))
         {
             if (hit.collider != null)
             {
-                // 구매 메서드
-                Debug.Log(hit.collider.gameObject.name + "구매");
-                rubyCoin -= hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
-            }
-           
-        }
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-                if (hit.collider != null)
+                if(rubyCoin - hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost >= 0)
                 {
-                    // 다중 구매 메서드
-                    countMessage.SetActive(true);
-                    Debug.Log("다중 구매");
+                    rubyCoin -= hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
+                } else
+                {
+                    warningText.SetActive(true);
+                    StartCoroutine(WarningTextFalse());
                 }
+            }
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1))
+        {
+            if (hit.collider != null)
+            {
+                rubyCoin += hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
+                multiplePrice = hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
+                countMessage.SetActive(true);
+                buttonText.text = "'" + hit.collider.gameObject.name + "' 아이템 구매?";
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             countMessage.SetActive(false);
-            Debug.Log("다중 구매 취소");
         }
-
+    }
+    
+    public void MultipleItemPurchase()
+    {
+        if (inputCount.text != null && rubyCoin >=0)
+        {
+            int _count;
+            _count = int.Parse(inputCount.text);
+            if(rubyCoin - multiplePrice * _count >= 0)
+            {
+                rubyCoin -= multiplePrice * _count;
+            } else
+            {
+                warningText.SetActive(true);
+                StartCoroutine(WarningTextFalse());
+            }
+        } 
     }
 
-   
- 
+    IEnumerator WarningTextFalse()
+    {
+        yield return new WaitForSeconds(3f);
+        warningText.SetActive(false);
+    }
+
 }
