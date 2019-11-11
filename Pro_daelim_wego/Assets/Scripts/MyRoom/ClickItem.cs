@@ -9,9 +9,16 @@ public class ClickItem : MonoBehaviour
     private GameObject countMessage; // 대량 구매시 개수 선택하는 창
 
     [SerializeField]
+    private Canvas canvas;
+
+    [SerializeField]
     private Text Ruby; // 코인 UI
     [SerializeField]
     private int rubyCoin; // 코인 갯수
+
+    [SerializeField]
+    private GameObject myContents; // 구매한 내 아이템
+
     [SerializeField]
     private GameObject warningText; // 돈이 부족할때 뜨는 메세지
     [SerializeField]
@@ -20,6 +27,9 @@ public class ClickItem : MonoBehaviour
     private InputField inputCount; // 대량 구매시 입력하는 아이템의 갯수;
 
     private int multiplePrice; // 대량 구매시 저장할 아이템의 가격
+    private GameObject multipleItem; // 대량 구매시 저장할 게임오브젝트
+
+    private GameObject myItemClones; // 아이템 구매시 생기는 Clone Objects
 
     Ray ray;
     RaycastHit2D hit;
@@ -54,6 +64,9 @@ public class ClickItem : MonoBehaviour
                 if(rubyCoin - hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost >= 0)
                 {
                     rubyCoin -= hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
+                    myItemClones = Instantiate(hit.collider.gameObject, myContents.transform.position, Quaternion.identity);
+                    myItemClones.transform.SetParent(myContents.transform, false);
+
                 } else
                 {
                     warningText.SetActive(true);
@@ -67,7 +80,9 @@ public class ClickItem : MonoBehaviour
             if (hit.collider != null)
             {
                 rubyCoin += hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
+                Destroy(myItemClones);
                 multiplePrice = hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
+                multipleItem = hit.collider.gameObject;
                 countMessage.SetActive(true);
                 buttonText.text = "'" + hit.collider.gameObject.name + "' 아이템 구매?";
             }
@@ -88,6 +103,12 @@ public class ClickItem : MonoBehaviour
             if(rubyCoin - multiplePrice * _count >= 0)
             {
                 rubyCoin -= multiplePrice * _count;
+                for (int i = 0; i < _count; i++)
+                {
+                    GameObject myItemClones = Instantiate(multipleItem, myContents.transform.position, Quaternion.identity);
+                    myItemClones.transform.SetParent(myContents.transform, false);
+                }
+                countMessage.SetActive(false);
             } else
             {
                 warningText.SetActive(true);
