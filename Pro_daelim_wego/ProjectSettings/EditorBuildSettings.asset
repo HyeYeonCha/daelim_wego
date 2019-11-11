@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/JumpGame.unity
     guid: bbd18a0f120b3794baa5c4d56b98876c
+  - enabled: 1
+    path: Assets/Scenes/MyRoom.unity
+    guid: ae5df68b714535845a4e06dd920448e0
   m_configObjects: {}
