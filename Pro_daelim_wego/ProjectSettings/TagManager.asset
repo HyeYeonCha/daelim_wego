@@ -15,6 +15,7 @@ TagManager:
   - Ketchup
   - Cheese
   - Tomato
+  - Lightning
   layers:
   - Default
   - TransparentFX

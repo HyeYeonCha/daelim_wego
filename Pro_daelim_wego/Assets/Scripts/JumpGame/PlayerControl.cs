@@ -22,7 +22,7 @@ public class PlayerControl : MonoBehaviour
     private float time; // 타이머 변수
     private float score; // 스코어 변수
 
-    public bool gameOver = false; // game over를 체크해주는 flag
+    static bool gameOver = false; // game over를 체크해주는 flag
     [SerializeField]
     private GameObject gameOverText; // game over일때 띄워주는 패널
 
