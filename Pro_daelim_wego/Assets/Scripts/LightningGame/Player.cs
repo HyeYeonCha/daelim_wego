@@ -12,13 +12,17 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private Text scoreText; // score text UI
-    private float score; // score 점수 
+    private float score; // score 점수
+
+    [SerializeField]
+    private Image hp;
 
     // Start is called before the first frame update
     void Start()
     {
         gm = FindObjectOfType<GM>();
         score = 0;
+        hp.fillAmount = 1;
     }
 
     // Update is called once per frame
@@ -53,10 +57,15 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Lightning")
         {
-            //gm.isGameOver = true;
-            //gm.gameOverText.SetActive(true);
+            hp.fillAmount -= 0.05f;
             Debug.Log("접촉");
-        } 
+
+            if (hp.fillAmount <= 0)
+            {
+                gm.isGameOver = true;
+                gm.gameOverText.SetActive(true);
+            }
+        }
 
         if (collision.gameObject.tag == "Ruby")
         {

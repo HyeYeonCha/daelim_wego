@@ -116,13 +116,14 @@ public class GM : MonoBehaviour
         float _r;
         _r = Random.Range(0, 3f);
         GameObject ru_go = Instantiate(ruby, new Vector3(_r * Cos(degree), _r * Sin(degree)), Quaternion.identity);
+        Destroy(ru_go, 10f);
     }
 
 
     // 리플레이 함수
     public void ReStart ()
     {
-        SceneManager.LoadScene("ArrowGame");
+        SceneManager.LoadScene("LightningGame");
     }
 
 }

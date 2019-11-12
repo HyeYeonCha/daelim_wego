@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Lightning : MonoBehaviour
 {
-    [SerializeField]
-    private float speed; // 번개의 이동속도
+    public float speed; // 번개의 이동속도
 
     Vector3 playerPosition; // 별의 좌표
     Vector3 myPosition; // 번개의 좌표
@@ -17,6 +16,7 @@ public class Lightning : MonoBehaviour
     void Start()
     {
         gm = FindObjectOfType<GM>();
+        speed = Random.Range(1, 5);
     }
 
     // Update is called once per frame
@@ -36,24 +36,14 @@ public class Lightning : MonoBehaviour
     // 플레이어를 찾아 이동
     private void MoveToPlayer()
     {
+        playerPosition = GameObject.FindWithTag("Player").transform.position;
 
-        StartCoroutine(CheckPlayerPosition());
-        //playerPosition = GameObject.FindWithTag("Player").transform.position;
         myPosition = transform.position;
 
         Vector3 dir = playerPosition - myPosition;
 
         dir.Normalize();
 
-        transform.position += dir * 0.01f;
-
+        transform.position += dir * 0.01f * speed;
     }
-
-    IEnumerator CheckPlayerPosition ()
-    {
-        yield return new WaitForSeconds(2.0f);
-        playerPosition = GameObject.FindWithTag("Player").transform.position;
-    }
-
-   
 }
