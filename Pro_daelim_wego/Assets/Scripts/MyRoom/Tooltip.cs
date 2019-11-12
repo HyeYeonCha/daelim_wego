@@ -35,7 +35,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         toolTip.SetActive(true);
-        toolTip.transform.position = new Vector2(MousPosition.x-1f, MousPosition.y-1f); // >> 툴팁의 포지션을 마우스 좌표의 옆으로 바꿔주기
+        toolTip.transform.position = new Vector2(MousPosition.x-2f, MousPosition.y-2f); // >> 툴팁의 포지션을 마우스 좌표의 옆으로 바꿔주기
         toolTipTextString = "" + item.ItemInfo.itemDesc;
         toolTipTextUI.text = toolTipTextString;
     }

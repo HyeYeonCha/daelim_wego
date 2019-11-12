@@ -26,7 +26,6 @@ public class BlockManager : MonoBehaviour
 
     private void ChangeLocation()
     {
-        
         float height = Random.Range(minHeight, maxHeight);
         transform.localPosition = new Vector3(location_x, height, 0.0f);
     }

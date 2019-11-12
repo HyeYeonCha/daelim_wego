@@ -77,7 +77,7 @@ public class PlayerControl : MonoBehaviour
         rd2.isKinematic = false;
         bx2.enabled = true;
 
-        if (Input.GetButtonDown("Fire1") && rd2.velocity.y == 0)
+        if (Input.GetButtonDown("Fire1") && (rd2.velocity.y <= 0 && rd2.velocity.y >= -1)) // 가속도가 -1일때도 허용 
         {
             rd2.velocity = new Vector2(0.5f, jumpForce);
         }

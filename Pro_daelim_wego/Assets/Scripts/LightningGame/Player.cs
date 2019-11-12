@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     private float score; // score 점수
 
     [SerializeField]
-    private Image hp;
+    private Image hp; // HP Bar Image UI
 
     // Start is called before the first frame update
     void Start()
@@ -58,7 +58,6 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Lightning")
         {
             hp.fillAmount -= 0.05f;
-            Debug.Log("접촉");
 
             if (hp.fillAmount <= 0)
             {
