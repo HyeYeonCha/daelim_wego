@@ -5,11 +5,13 @@ using UnityEngine;
 public class Lightning : MonoBehaviour
 {
     [SerializeField]
-    private float speed;
+    private float speed; // 번개의 이동속도
 
-    Vector3 playerPosition;
+    Vector3 playerPosition; // 별의 좌표
+    Vector3 myPosition; // 번개의 좌표
 
-    GM gm;
+    GM gm; // GM 스크립트를 가져오는 GM형 변수
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,11 +33,27 @@ public class Lightning : MonoBehaviour
         }
     }
 
-    // 이동 수정하기 직선방면으로만 가도록
+    // 플레이어를 찾아 이동
     private void MoveToPlayer()
     {
-        playerPosition = GameObject.FindWithTag("Player").transform.position;
-        transform.position = Vector3.MoveTowards(transform.position, playerPosition, Time.deltaTime * speed);
+
+        StartCoroutine(CheckPlayerPosition());
+        //playerPosition = GameObject.FindWithTag("Player").transform.position;
+        myPosition = transform.position;
+
+        Vector3 dir = playerPosition - myPosition;
+
+        dir.Normalize();
+
+        transform.position += dir * 0.01f;
+
     }
 
+    IEnumerator CheckPlayerPosition ()
+    {
+        yield return new WaitForSeconds(2.0f);
+        playerPosition = GameObject.FindWithTag("Player").transform.position;
+    }
+
+   
 }

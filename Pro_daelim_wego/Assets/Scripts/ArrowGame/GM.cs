@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using static UnityEngine.Mathf;
+using System.Linq;
+using System.Collections.Generic;
 
 public class GM : MonoBehaviour
 {
@@ -20,6 +22,13 @@ public class GM : MonoBehaviour
     private GameObject lightning; // 번개모양 장애물 
     [SerializeField]
     private GameObject lightningClones; // 장애물들을 하이어라키뷰에서 정리해줄 부모오브젝트
+    public List<GameObject> lightning_list = new List<GameObject>(); // 장애물들을 배열에 저장
+ 
+
+    [SerializeField]
+    private GameObject ruby; // 루비
+    [SerializeField]
+    private GameObject rubyClones; // 루비들을 하이어라키뷰에서 정리해줄 부모오브젝트
 
     public bool isGameOver = true; // 게임오버 체크 플래그
     
@@ -45,6 +54,8 @@ public class GM : MonoBehaviour
         isGameOver = true;
 
         startText.text = "Click !!";
+
+        InvokeRepeating("GenerateRuby", 15, 10);
     }
 
     // Update is called once per frame
@@ -63,7 +74,9 @@ public class GM : MonoBehaviour
             {
                 currentTime = 0.0f;
                 GenerateLightning();
-            } 
+            }
+
+            
         }
         else
         {
@@ -89,16 +102,20 @@ public class GM : MonoBehaviour
         startText.enabled = false;
         isGameOver = false;
     }
-    // 회전값 수정하기 >> 좀 이상함.
+   
     // 장애물 instantiate
     private void GenerateLightning ()
     {
-        GameObject go = Instantiate(lightning, new Vector3(r * Cos(degree), r * Sin(degree)), Quaternion.FromToRotation(Vector3.up, go.transform - player.transform).eulerAngles.z);
-        float rad = Atan2(player.transform.position.x, player.transform.position.y);
-        float rotate = rad * Rad2Deg; // Mathf.Rad2Deg = 360 / 2 * PI
+        lightning_list.Add(Instantiate(lightning, new Vector3(r * Cos(degree), r * Sin(degree)), Quaternion.identity));
+        lightning_list.Last().transform.SetParent(lightningClones.transform);
         
-       // go.transform.localEulerAngles = new Vector3(0, 0, (-rotate -90));
-        go.transform.SetParent(lightningClones.transform);
+    }
+
+    private void GenerateRuby ()
+    {
+        float _r;
+        _r = Random.Range(0, 3f);
+        GameObject ru_go = Instantiate(ruby, new Vector3(_r * Cos(degree), _r * Sin(degree)), Quaternion.identity);
     }
 
 

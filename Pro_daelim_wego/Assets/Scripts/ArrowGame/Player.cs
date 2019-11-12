@@ -1,18 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    GM gm;
-    Vector3 currentPosition;
+    GM gm; // GM 스크립트를 이용하기 위한 GM형 변수
+    Vector3 currentPosition; // 플레이어의 현재 좌표
     [SerializeField]
     private float playerSpeed; // 플레이어 스피드
+
+    [SerializeField]
+    private Text scoreText; // score text UI
+    private float score; // score 점수 
 
     // Start is called before the first frame update
     void Start()
     {
         gm = FindObjectOfType<GM>();
+        score = 0;
     }
 
     // Update is called once per frame
@@ -23,7 +29,6 @@ public class Player : MonoBehaviour
             PlayerController();
             currentPosition = transform.position;
         }
-        
     }
 
     // 플레이어 이동 함수 및 이동 제한 범위 설정
@@ -48,9 +53,25 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Lightning")
         {
-            gm.isGameOver = true;
-            gm.gameOverText.SetActive(true);
+            //gm.isGameOver = true;
+            //gm.gameOverText.SetActive(true);
+            Debug.Log("접촉");
+        } 
+
+        if (collision.gameObject.tag == "Ruby")
+        {
+            score++;
+            scoreText.text = " : " + score;
+
+            for (int i = 0; i < gm.lightning_list.Count; i++)
+            {
+                Destroy(gm.lightning_list[i]);
+            }
+
+            gm.lightning_list.Clear();
+            Destroy(collision.gameObject);
         }
+
     }
 
 }
