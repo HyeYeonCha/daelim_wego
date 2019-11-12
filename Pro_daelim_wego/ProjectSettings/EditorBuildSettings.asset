@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MyRoom.unity
     guid: ae5df68b714535845a4e06dd920448e0
   - enabled: 1
-    path: Assets/Scenes/LightningGame.unity
+    path: Assets/Scenes/ArrowGame.unity
     guid: 2f9f2bb1ec505344a9fdc0480cd831c5
   m_configObjects: {}
