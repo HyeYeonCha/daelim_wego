@@ -51,12 +51,35 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject GameOverImg; // 게임오버 이미지
 
+    [SerializeField]
+    private Text highScoreText; // highScoreText UI
+    private float highScore; // high score를 담을 변수
+
+    [SerializeField]
+    private Image burningBar_EnergyField; // burning energy field image
+    [SerializeField]
+    private Image burningFullImage; // burning field full image
+    private bool isBurning; // burning flag 
+    [SerializeField]
+    private GameObject burningEnter; // 버닝타임일때 엔터 연타 이미지 애니메이션
+
+    [SerializeField]
+    private AudioSource bugerSFX; // 버거 완성시 나오는 효과음 
+    [SerializeField]
+    private AudioSource buringBGM;  // 버닝상태에서 나오는 배경음
+    [SerializeField]
+    private AudioSource idleBGM; // 평상시 게임시 나오는 배경음
+
     // Start is called before the first frame update
     void Start()
     {
         gameOver = false;
         scoreflag = false;
         GameOverImg.SetActive(false);
+
+        burningBar_EnergyField.fillAmount = 0.05f;
+
+        isBurning = false;
 
         SetBuger();
         //BugerIngredients.Initialize();
@@ -68,7 +91,6 @@ public class GameManager : MonoBehaviour
                 menu.name = "("+i+","+j+")";
                 BugerIngredients[i, j] = menu;
                 menu.transform.SetParent(BugerIngredientsMenu.transform);
-                
             }
         }
 
@@ -92,6 +114,24 @@ public class GameManager : MonoBehaviour
             time = 60;
             GameOverImg.SetActive(true);
         }
+
+        if (burningBar_EnergyField.fillAmount >= 1.0f)
+        {
+            isBurning = true;
+            burningFullImage.enabled = true;
+            burningBar_EnergyField.enabled = false;
+            burningEnter.SetActive(true);
+            // StartCoroutine(IsBurningFalse());
+
+        } else
+        {
+            isBurning = false;
+            burningFullImage.enabled = false;
+            burningBar_EnergyField.enabled = true;
+            burningEnter.SetActive(false);
+           
+        }
+
     }
 
     // 플레이어가 생성한 버거 재료배열과 완성되어있던 버거 재료배열 비교후 점수 반환
@@ -118,15 +158,26 @@ public class GameManager : MonoBehaviour
 
         if (scoreflag)
         {
+            bugerSFX.Play();
             score += 100;
             scoreText.text = "Score : " + score;
+            burningBar_EnergyField.fillAmount += 0.5f;
             DestroyBuger();
+
+            if (burningBar_EnergyField.fillAmount >= 1.0f)
+            {
+                buringBGM.Play();
+                idleBGM.Stop();
+                StartCoroutine(IsBurningFalse());
+            } 
+            
         }
         else
         {
             if (score > 0)
             {
                 score -= 100;
+                burningBar_EnergyField.fillAmount -= 0.2f;
             } else
             {
                 score = 0;
@@ -224,8 +275,28 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            ScorePlus();
+            if(isBurning)
+            {
+                DestroyBuger();
+                score += 10;
+                scoreText.text = "Score : " + score;
+                bugerSFX.Play();
+
+            } else
+            {
+                ScorePlus();
+            }
+            
         }
+    }
+
+    IEnumerator IsBurningFalse ()
+    {
+        yield return new WaitForSeconds(5f);
+        isBurning = false;
+        burningBar_EnergyField.fillAmount = 0.05f;
+        buringBGM.Stop();
+        idleBGM.Play();
     }
 
     // 플레이어 커서의 x,y 좌표를 받아 해당 위치에 일치하는 버거 재료들 생성

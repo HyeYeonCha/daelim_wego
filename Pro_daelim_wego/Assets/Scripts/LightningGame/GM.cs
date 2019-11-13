@@ -34,8 +34,6 @@ public class GM : MonoBehaviour
     
     public GameObject gameOverText; // 게임오버 화면
 
- 
-
     [SerializeField]
     private float r; // 원의 반지름
     private float degree; // Field의 원주에서 랜덤하게 생성할 장애물의 각도

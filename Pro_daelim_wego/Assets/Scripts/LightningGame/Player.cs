@@ -11,18 +11,32 @@ public class Player : MonoBehaviour
     private float playerSpeed; // 플레이어 스피드
 
     [SerializeField]
+    private Text rubyScoreText; // Ruby score text UI
+    private float rubyScore; // Ruby score 점수 변수
+
+    [SerializeField]
     private Text scoreText; // score text UI
-    private float score; // score 점수
+    private float score; // score 점수 변수
 
     [SerializeField]
     private Image hp; // HP Bar Image UI
+
+    [SerializeField]
+    private AudioSource ruby_SFX;
+
+    [SerializeField]
+    private Text highScoreText; // highScoreText UI
+    private float highScore; // high score를 담을 변수
 
     // Start is called before the first frame update
     void Start()
     {
         gm = FindObjectOfType<GM>();
-        score = 0;
+        ruby_SFX = GetComponent<AudioSource>();
+
+        rubyScore = 0;
         hp.fillAmount = 1;
+        score = 0;
     }
 
     // Update is called once per frame
@@ -32,6 +46,8 @@ public class Player : MonoBehaviour
         {
             PlayerController();
             currentPosition = transform.position;
+            score += Time.deltaTime;
+            scoreText.text = "Score : " + score.ToString("N0");
         }
     }
 
@@ -68,8 +84,10 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.tag == "Ruby")
         {
-            score++;
-            scoreText.text = " : " + score;
+            rubyScore++;
+            rubyScoreText.text = " : " + rubyScore;
+            score += 100;
+            ruby_SFX.Play();
 
             for (int i = 0; i < gm.lightning_list.Count; i++)
             {

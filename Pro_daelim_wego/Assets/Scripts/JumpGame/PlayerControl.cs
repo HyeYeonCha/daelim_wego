@@ -13,27 +13,39 @@ public class PlayerControl : MonoBehaviour
     private BoxCollider2D bx2; // 플레이어의 Collider
 
     [SerializeField]
-    private Text scoreText; // scoreText의 UI
+    private Text rubyScoreText; // rubyScoreText의 UI
     [SerializeField]
     private Text timeText; // timeText의 UI
+    [SerializeField]
+    private Text scoreText; // scoreText의 UI
+
     [SerializeField]
     private Text gameStartText; // 시작전 UI
 
     private float time; // 타이머 변수
+    private float rubyScore; // 루비 스코어 변수
     private float score; // 스코어 변수
 
     static bool gameOver = false; // game over를 체크해주는 flag
     [SerializeField]
     private GameObject gameOverText; // game over일때 띄워주는 패널
 
+    private AudioSource ruby_SFX; // 루비를 먹었을 때 효과음
+
+    [SerializeField]
+    private Text highScoreText; // highScoreText UI
+    private float highScore; // high score를 담을 변수
+
     // Start is called before the first frame update
     void Start()
     {
         time = 60;
+        rubyScore = 0;
         score = 0;
 
         rd2 = GetComponent<Rigidbody2D>();
         bx2 = GetComponent<BoxCollider2D>();
+        ruby_SFX = GetComponent<AudioSource>();
 
         rd2.isKinematic = true;
         bx2.enabled = false;
@@ -50,9 +62,12 @@ public class PlayerControl : MonoBehaviour
     {
         if (!gameOver)
         {
-
             time -= Time.deltaTime;
             timeText.text = time.ToString("N0");
+
+            score += Time.deltaTime;
+            scoreText.text = "Score : " + score.ToString("N0");
+
             PlyerController();
 
         } else
@@ -107,9 +122,12 @@ public class PlayerControl : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ruby")
         {
-            score ++;
-            scoreText.text = " " + score;
+            rubyScore ++;
+            rubyScoreText.text = " : " + rubyScore;
             collision.gameObject.SetActive(false);
+            score += 100;
+            scoreText.text = "Score : " + score;
+            ruby_SFX.Play();
         }
     }
     
