@@ -106,6 +106,32 @@ public class GameManager : MonoBehaviour
 
             //timeText.text = "" + Mathf.Round(time);
             timeText.text = time.ToString("N0");
+
+            if (burningBar_EnergyField.fillAmount >= 1.0f)
+            {
+                isBurning = true;
+                burningFullImage.enabled = true;
+                burningBar_EnergyField.enabled = false;
+                burningEnter.SetActive(true);
+
+            }
+            else
+            {
+                isBurning = false;
+                burningFullImage.enabled = false;
+                burningBar_EnergyField.enabled = true;
+                burningEnter.SetActive(false);
+                if (burningBar_EnergyField.fillAmount >= 0.05f)
+                {
+                    burningBar_EnergyField.fillAmount -= 0.00025f;
+                }
+                else
+                {
+                    burningBar_EnergyField.fillAmount = 0.05f;
+                }
+
+            }
+
         }
 
         if (time <= 0)
@@ -113,23 +139,6 @@ public class GameManager : MonoBehaviour
             gameOver = true;
             time = 60;
             GameOverImg.SetActive(true);
-        }
-
-        if (burningBar_EnergyField.fillAmount >= 1.0f)
-        {
-            isBurning = true;
-            burningFullImage.enabled = true;
-            burningBar_EnergyField.enabled = false;
-            burningEnter.SetActive(true);
-            // StartCoroutine(IsBurningFalse());
-
-        } else
-        {
-            isBurning = false;
-            burningFullImage.enabled = false;
-            burningBar_EnergyField.enabled = true;
-            burningEnter.SetActive(false);
-           
         }
 
     }
@@ -161,7 +170,7 @@ public class GameManager : MonoBehaviour
             bugerSFX.Play();
             score += 100;
             scoreText.text = "Score : " + score;
-            burningBar_EnergyField.fillAmount += 0.5f;
+            burningBar_EnergyField.fillAmount += 0.2f;
             DestroyBuger();
 
             if (burningBar_EnergyField.fillAmount >= 1.0f)

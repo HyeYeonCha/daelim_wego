@@ -36,6 +36,23 @@ public class PlayerControl : MonoBehaviour
     private Text highScoreText; // highScoreText UI
     private float highScore; // high score를 담을 변수
 
+    [SerializeField]
+    private Image burningBar_EnergyField; // burning energy field image
+    [SerializeField]
+    private Image burningFullImage; // burning field full image
+    private bool isBurning; // burning flag 
+    [SerializeField]
+    private GameObject burningPlayer; // 버닝 모드일때 플레이어의 모습
+
+    [SerializeField]
+    private AudioSource bugerSFX; // 버거 완성시 나오는 효과음 
+    [SerializeField]
+    private AudioSource buringBGM;  // 버닝상태에서 나오는 배경음
+    [SerializeField]
+    private AudioSource idleBGM; // 평상시 게임시 나오는 배경음
+
+    private Scroll scroll; // scroll script를 쓰기위한 scroll형 변수
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,12 +62,13 @@ public class PlayerControl : MonoBehaviour
 
         rd2 = GetComponent<Rigidbody2D>();
         bx2 = GetComponent<BoxCollider2D>();
-        ruby_SFX = GetComponent<AudioSource>();
+        scroll = FindObjectOfType<Scroll>();
 
         rd2.isKinematic = true;
         bx2.enabled = false;
         gameOver = true;
         gameOverText.SetActive(false);
+        isBurning = false;
 
         gameStartText.enabled = true;
         gameStartText.text = "Click !!!";
@@ -69,6 +87,15 @@ public class PlayerControl : MonoBehaviour
             scoreText.text = "Score : " + score.ToString("N0");
 
             PlyerController();
+
+            if (burningBar_EnergyField.fillAmount >= 0.05f)
+            {
+                burningBar_EnergyField.fillAmount -= 0.00025f;
+            }
+            else
+            {
+                burningBar_EnergyField.fillAmount = 0.05f;
+            }
 
         } else
         {
@@ -92,10 +119,18 @@ public class PlayerControl : MonoBehaviour
         rd2.isKinematic = false;
         bx2.enabled = true;
 
-        if (Input.GetButtonDown("Fire1") && (rd2.velocity.y <= 0 && rd2.velocity.y >= -1)) // 가속도가 -1일때도 허용 
+        if(!isBurning)
         {
-            rd2.velocity = new Vector2(0.5f, jumpForce);
+            if (Input.GetButtonDown("Fire1") && (rd2.velocity.y <= 0 && rd2.velocity.y >= -1)) // 가속도가 -1일때도 허용 
+            {
+                rd2.velocity = new Vector2(0.5f, jumpForce);
+            }
+        } else
+        {
+            Vector3 mousePosition = Input.mousePosition;
+            gameObject.transform.position = mousePosition;
         }
+        
 
         if(transform.position.x < -9 || transform.position.y < -6)
         {
@@ -126,11 +161,47 @@ public class PlayerControl : MonoBehaviour
             rubyScoreText.text = " : " + rubyScore;
             collision.gameObject.SetActive(false);
             score += 100;
+            burningBar_EnergyField.fillAmount += 0.5f;
+
+            if(burningBar_EnergyField.fillAmount >= 1.0f)
+            {
+                ISBurningTrue();
+            }
+            
             scoreText.text = "Score : " + score;
-            ruby_SFX.Play();
+            ruby_SFX.Play(); // 버닝 고치기
         }
     }
-    
+
+    private void ISBurningTrue()
+    {
+        scroll.randomSpeed *= 10.0f;
+        score += 1;
+
+        isBurning = true;
+        burningFullImage.enabled = true;
+        burningBar_EnergyField.enabled = false;
+        burningPlayer.SetActive(true);
+        StartCoroutine(ISBurningFalse());
+
+        buringBGM.Play();
+        idleBGM.Stop();
+    }
+
+    IEnumerator ISBurningFalse ()
+    {
+        yield return new WaitForSeconds(5f);
+
+        isBurning = false;
+        burningFullImage.enabled = false;
+        burningBar_EnergyField.enabled = true;
+        burningPlayer.SetActive(false);
+
+        buringBGM.Stop();
+        idleBGM.Play();
+    }
+
+
     // Replay
     public void ReplayGame()
     {

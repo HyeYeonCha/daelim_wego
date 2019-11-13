@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Scroll : MonoBehaviour
 {
-    [SerializeField]
-    private float randomSpeed; // 배경 이동속도 (랜덤)
+    public float randomSpeed; // 배경 이동속도 (랜덤)
 
     [SerializeField]
     private float staretPos; // 배경 시작지점
