@@ -30,8 +30,6 @@ public class PlayerControl : MonoBehaviour
     [SerializeField]
     private GameObject gameOverText; // game over일때 띄워주는 패널
 
-    private AudioSource ruby_SFX; // 루비를 먹었을 때 효과음
-
     [SerializeField]
     private Text highScoreText; // highScoreText UI
     private float highScore; // high score를 담을 변수
@@ -45,7 +43,7 @@ public class PlayerControl : MonoBehaviour
     private GameObject burningPlayer; // 버닝 모드일때 플레이어의 모습
 
     [SerializeField]
-    private AudioSource bugerSFX; // 버거 완성시 나오는 효과음 
+    private AudioSource ruby_SFX; // 루비를 먹었을때의 효과음
     [SerializeField]
     private AudioSource buringBGM;  // 버닝상태에서 나오는 배경음
     [SerializeField]
@@ -53,9 +51,17 @@ public class PlayerControl : MonoBehaviour
 
     private Scroll scroll; // scroll script를 쓰기위한 scroll형 변수
 
+    [SerializeField]
+    private Camera camera; // screen posion을 world posion 으로 바꾸기 위한 카메라 변수
+
+    [SerializeField]
+    private GameObject burningBG; // 버닝상태일때의 배경
+
     // Start is called before the first frame update
     void Start()
     {
+        gameObject.SetActive(true);
+
         time = 60;
         rubyScore = 0;
         score = 0;
@@ -70,9 +76,13 @@ public class PlayerControl : MonoBehaviour
         gameOverText.SetActive(false);
         isBurning = false;
 
+        burningFullImage.enabled = false;
         gameStartText.enabled = true;
         gameStartText.text = "Click !!!";
-        
+
+        burningBG.SetActive(false);
+
+        idleBGM.Play();
     }
 
     // Update is called once per frame
@@ -92,17 +102,31 @@ public class PlayerControl : MonoBehaviour
             {
                 burningBar_EnergyField.fillAmount -= 0.00025f;
             }
-            else
+            else if(burningBar_EnergyField.fillAmount < 0.05f)
             {
                 burningBar_EnergyField.fillAmount = 0.05f;
             }
 
         } else
         {
-            if (Input.GetMouseButtonDown(0))
+            if(isBurning)
             {
-                StartCoroutine(GameStart());
+                rd2.isKinematic = true;
             }
+            
+            if(score == 0)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    StartCoroutine(GameStart());
+                }
+
+            } else
+            {
+                gameObject.SetActive(false);
+            }
+            
+
         }
 
         if (time <= 0)
@@ -116,23 +140,36 @@ public class PlayerControl : MonoBehaviour
     // 플레이어 이동 함수
     public void PlyerController()
     {
-        rd2.isKinematic = false;
         bx2.enabled = true;
 
         if(!isBurning)
         {
-            if (Input.GetButtonDown("Fire1") && (rd2.velocity.y <= 0 && rd2.velocity.y >= -1)) // 가속도가 -1일때도 허용 
+            if (score < 100)
+            {
+                rd2.isKinematic = false;
+            }
+            // else
+            //{
+            //    StartCoroutine(ISKinematicFalse());
+            //}
+            
+            if (Input.GetButtonDown("Fire1") && (rd2.velocity.y <= 0)) 
             {
                 rd2.velocity = new Vector2(0.5f, jumpForce);
             }
+
         } else
         {
-            Vector3 mousePosition = Input.mousePosition;
+            Vector3 mousePosition = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
             gameObject.transform.position = mousePosition;
         }
-        
 
-        if(transform.position.x < -9 || transform.position.y < -6)
+        if(gameObject.transform.position.y >= 5.0f)
+        {
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 5.0f);
+        }
+
+        if (transform.position.x < -11 || transform.position.y < -6)
         {
             gameOver = true;
             gameOverText.SetActive(true);
@@ -161,47 +198,99 @@ public class PlayerControl : MonoBehaviour
             rubyScoreText.text = " : " + rubyScore;
             collision.gameObject.SetActive(false);
             score += 100;
-            burningBar_EnergyField.fillAmount += 0.5f;
 
-            if(burningBar_EnergyField.fillAmount >= 1.0f)
+            if(!isBurning)
             {
-                ISBurningTrue();
+                burningBar_EnergyField.fillAmount += 0.5f;
             }
             
-            scoreText.text = "Score : " + score;
-            ruby_SFX.Play(); // 버닝 고치기
+            scoreText.text = "Score : " + score.ToString("N0");
+            ruby_SFX.Play();
         }
+
+        if (burningBar_EnergyField.fillAmount == 1.0f)
+        {
+            isBurning = true;
+
+            idleBGM.Stop();
+            buringBGM.Play();
+
+            if (isBurning)
+            {
+                burningBar_EnergyField.fillAmount = 1.0f;
+
+                ISBurningTrue();
+                StartCoroutine(ISBurningFalse());
+            }
+        }
+
     }
 
     private void ISBurningTrue()
     {
-        scroll.randomSpeed *= 10.0f;
-        score += 1;
+        scroll.burningSpeed *= 5.0f;
+
+        if (scroll.burningSpeed >= 100)
+        {
+            scroll.burningSpeed = 10f;
+        }
+        score += 2;
+        scoreText.text = "Score : " + score.ToString("N0");
+
+        burningBar_EnergyField.fillAmount = 1.0f;
 
         isBurning = true;
+        rd2.isKinematic = true;
+        burningBG.SetActive(true);
+        burningBG.transform.position = new Vector3(0, 0, 1);
+        burningBG.gameObject.GetComponent<Scroll>().burningSpeed *= 5.0f;
+
+        if(burningBG.gameObject.GetComponent<Scroll>().burningSpeed >= 20.0f)
+        {
+            burningBG.gameObject.GetComponent<Scroll>().burningSpeed = 20.0f;
+        }
+
         burningFullImage.enabled = true;
         burningBar_EnergyField.enabled = false;
         burningPlayer.SetActive(true);
-        StartCoroutine(ISBurningFalse());
 
-        buringBGM.Play();
-        idleBGM.Stop();
+        StartCoroutine(ISBurningFalse());
     }
 
     IEnumerator ISBurningFalse ()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(10f);
 
         isBurning = false;
+
+        rd2.isKinematic = true;
+
+        scroll.burningSpeed = 1;
+
+        burningBG.SetActive(false);
+        burningPlayer.SetActive(false);
         burningFullImage.enabled = false;
         burningBar_EnergyField.enabled = true;
-        burningPlayer.SetActive(false);
 
+        burningBar_EnergyField.fillAmount = 0.05f;
+        
         buringBGM.Stop();
         idleBGM.Play();
+
+        StartCoroutine(ISKinematicFalse());
+
     }
 
+    IEnumerator ISKinematicFalse ()
+    {
+        Debug.Log("fdfd1111");
+        rd2.isKinematic = true;
+        yield return new WaitForSeconds(0.5f);
+        Debug.Log("fdfd2222");
+        rd2.isKinematic = false;
+    }
 
+    
     // Replay
     public void ReplayGame()
     {
