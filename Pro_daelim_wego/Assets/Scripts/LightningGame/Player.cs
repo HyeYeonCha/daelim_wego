@@ -25,6 +25,9 @@ public class Player : MonoBehaviour
     private AudioSource ruby_SFX;
 
     [SerializeField]
+    private AudioSource hurt_SFX;
+
+    [SerializeField]
     private Text highScoreText; // highScoreText UI
     private float highScore; // high score를 담을 변수
 
@@ -61,7 +64,7 @@ public class Player : MonoBehaviour
 
         float distance = Vector3.Distance(new Vector3(0, 0, 0), nextPosition);
 
-        if (distance < 3.5)
+        if (distance < 4.2)
         {
             transform.position += new Vector3(horizontal * playerSpeed * Time.deltaTime, vertical * playerSpeed * Time.deltaTime);
         }
@@ -71,9 +74,10 @@ public class Player : MonoBehaviour
     // 플레이어 충돌체크
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Lightning")
+        if (collision.gameObject.tag == "Lightning" || collision.gameObject.tag == "_Lightning")
         {
             hp.fillAmount -= 0.05f;
+            hurt_SFX.Play();
 
             if (hp.fillAmount <= 0)
             {

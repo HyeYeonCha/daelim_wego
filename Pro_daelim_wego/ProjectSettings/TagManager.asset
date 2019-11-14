@@ -16,6 +16,7 @@ TagManager:
   - Cheese
   - Tomato
   - Lightning
+  - _Lightning
   layers:
   - Default
   - TransparentFX

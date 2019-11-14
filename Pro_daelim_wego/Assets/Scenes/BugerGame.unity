@@ -2242,6 +2242,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BurningBar
       objectReference: {fileID: 0}
+    - target: {fileID: 4366505333116562056, guid: 36242072a749bfb4eae394d83f0912e2,
+        type: 3}
+      propertyPath: m_FillAmount
+      value: 0.07
+      objectReference: {fileID: 0}
     - target: {fileID: 5599662521973948773, guid: 36242072a749bfb4eae394d83f0912e2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2347,25 +2352,20 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7449529238995259232, guid: 36242072a749bfb4eae394d83f0912e2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6503972084737745068, guid: 36242072a749bfb4eae394d83f0912e2,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -1
       objectReference: {fileID: 0}
-    - target: {fileID: 4366505333116562056, guid: 36242072a749bfb4eae394d83f0912e2,
-        type: 3}
-      propertyPath: m_FillAmount
-      value: 0.07
-      objectReference: {fileID: 0}
     - target: {fileID: 3677820138178372447, guid: 36242072a749bfb4eae394d83f0912e2,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7449529238995259232, guid: 36242072a749bfb4eae394d83f0912e2,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36242072a749bfb4eae394d83f0912e2, type: 3}

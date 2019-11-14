@@ -148,12 +148,8 @@ public class PlayerControl : MonoBehaviour
             {
                 rd2.isKinematic = false;
             }
-            // else
-            //{
-            //    StartCoroutine(ISKinematicFalse());
-            //}
             
-            if (Input.GetButtonDown("Fire1") && (rd2.velocity.y <= 0)) 
+            if (Input.GetButtonDown("Fire1") && (rd2.velocity.y <= 0) && (gameObject.transform.position.y <= 3f)) 
             {
                 rd2.velocity = new Vector2(0.5f, jumpForce);
             }
@@ -162,11 +158,6 @@ public class PlayerControl : MonoBehaviour
         {
             Vector3 mousePosition = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
             gameObject.transform.position = mousePosition;
-        }
-
-        if(gameObject.transform.position.y >= 5.0f)
-        {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 5.0f);
         }
 
         if (transform.position.x < -11 || transform.position.y < -6)
@@ -242,7 +233,7 @@ public class PlayerControl : MonoBehaviour
         isBurning = true;
         rd2.isKinematic = true;
         burningBG.SetActive(true);
-        burningBG.transform.position = new Vector3(0, 0, 1);
+        burningBG.transform.position = new Vector3(0, 0, 0);
         burningBG.gameObject.GetComponent<Scroll>().burningSpeed *= 5.0f;
 
         if(burningBG.gameObject.GetComponent<Scroll>().burningSpeed >= 20.0f)
@@ -283,10 +274,8 @@ public class PlayerControl : MonoBehaviour
 
     IEnumerator ISKinematicFalse ()
     {
-        Debug.Log("fdfd1111");
         rd2.isKinematic = true;
-        yield return new WaitForSeconds(0.5f);
-        Debug.Log("fdfd2222");
+        yield return new WaitForSeconds(0.2f);
         rd2.isKinematic = false;
     }
 

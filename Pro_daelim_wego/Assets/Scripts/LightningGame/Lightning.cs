@@ -27,7 +27,7 @@ public class Lightning : MonoBehaviour
             MoveToPlayer();
         }
         
-        if(3.5f <= Vector3.Distance(new Vector3(0, 0, 0), transform.position))
+        if(4.0f <= Vector3.Distance(new Vector3(0, 0, 0), transform.position))
         {
             Destroy(gameObject);
         }

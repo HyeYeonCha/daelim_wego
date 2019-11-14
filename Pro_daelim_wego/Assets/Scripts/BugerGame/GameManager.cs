@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour
             bugerSFX.Play();
             score += 100;
             scoreText.text = "Score : " + score;
-            burningBar_EnergyField.fillAmount += 0.2f;
+            burningBar_EnergyField.fillAmount += 0.5f;
             DestroyBuger();
 
             if (burningBar_EnergyField.fillAmount >= 1.0f)

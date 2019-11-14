@@ -53,7 +53,8 @@ public class GM : MonoBehaviour
 
         startText.text = "Click !!";
 
-        InvokeRepeating("GenerateRuby", 15, 10);
+        InvokeRepeating("GenerateRuby", 10, 10);
+        
     }
 
     // Update is called once per frame
