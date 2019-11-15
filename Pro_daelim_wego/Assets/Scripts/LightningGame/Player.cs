@@ -31,11 +31,14 @@ public class Player : MonoBehaviour
     private Text highScoreText; // highScoreText UI
     private float highScore; // high score를 담을 변수
 
+    Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
         gm = FindObjectOfType<GM>();
         ruby_SFX = GetComponent<AudioSource>();
+        anim = GetComponent<Animator>();
 
         rubyScore = 0;
         hp.fillAmount = 1;
@@ -78,6 +81,7 @@ public class Player : MonoBehaviour
         {
             hp.fillAmount -= 0.05f;
             hurt_SFX.Play();
+            anim.SetTrigger("Hurt");
 
             if (hp.fillAmount <= 0)
             {

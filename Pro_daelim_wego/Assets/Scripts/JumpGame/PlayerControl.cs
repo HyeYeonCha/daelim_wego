@@ -57,6 +57,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField]
     private GameObject burningBG; // 버닝상태일때의 배경
 
+    Animator anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -66,6 +67,7 @@ public class PlayerControl : MonoBehaviour
         rubyScore = 0;
         score = 0;
 
+        anim = GetComponent<Animator>();
         rd2 = GetComponent<Rigidbody2D>();
         bx2 = GetComponent<BoxCollider2D>();
         scroll = FindObjectOfType<Scroll>();
@@ -152,6 +154,7 @@ public class PlayerControl : MonoBehaviour
             if (Input.GetButtonDown("Fire1") && (rd2.velocity.y <= 0) && (gameObject.transform.position.y <= 3f)) 
             {
                 rd2.velocity = new Vector2(0.5f, jumpForce);
+                anim.SetTrigger("Jump");
             }
 
         } else
@@ -189,8 +192,9 @@ public class PlayerControl : MonoBehaviour
             rubyScoreText.text = " : " + rubyScore;
             collision.gameObject.SetActive(false);
             score += 100;
+            anim.SetTrigger("Jump");
 
-            if(!isBurning)
+            if (!isBurning)
             {
                 burningBar_EnergyField.fillAmount += 0.5f;
             }
@@ -230,6 +234,7 @@ public class PlayerControl : MonoBehaviour
 
         burningBar_EnergyField.fillAmount = 1.0f;
 
+        anim.SetTrigger("Jump");
         isBurning = true;
         rd2.isKinematic = true;
         burningBG.SetActive(true);
