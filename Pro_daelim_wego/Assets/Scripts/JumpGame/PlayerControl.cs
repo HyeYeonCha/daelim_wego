@@ -238,7 +238,7 @@ public class PlayerControl : MonoBehaviour
         isBurning = true;
         rd2.isKinematic = true;
         burningBG.SetActive(true);
-        burningBG.transform.position = new Vector3(0, 0, 0);
+        burningBG.transform.position = new Vector3(0, 0, 1);
         burningBG.gameObject.GetComponent<Scroll>().burningSpeed *= 5.0f;
 
         if(burningBG.gameObject.GetComponent<Scroll>().burningSpeed >= 20.0f)

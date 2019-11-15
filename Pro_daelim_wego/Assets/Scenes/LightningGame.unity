@@ -1281,7 +1281,7 @@ MonoBehaviour:
   isGameOver: 1
   gameOverText: {fileID: 654881711}
   r: 4
-  term: 3
+  term: 1.5
 --- !u!4 &1168030965
 Transform:
   m_ObjectHideFlags: 0

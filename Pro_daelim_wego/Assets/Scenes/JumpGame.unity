@@ -2596,6 +2596,16 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 7213782918372413037, guid: b7bf02e5b1b27d046bf177ae8975de39,
+        type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7213782918372413037, guid: b7bf02e5b1b27d046bf177ae8975de39,
+        type: 3}
+      propertyPath: m_Mass
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8271311059068299945, guid: b7bf02e5b1b27d046bf177ae8975de39,
         type: 3}
       propertyPath: rubyScoreText
