@@ -135,6 +135,7 @@ public class PlayerControl : MonoBehaviour
         {
             gameOver = true;
             gameOverText.SetActive(true);
+            HighScoreSave();
             time = 60;
         }
     }
@@ -167,6 +168,7 @@ public class PlayerControl : MonoBehaviour
         {
             gameOver = true;
             gameOverText.SetActive(true);
+            HighScoreSave();
         }
     }
 
@@ -291,5 +293,32 @@ public class PlayerControl : MonoBehaviour
         SceneManager.LoadScene("JumpGame");
     }
 
-   
+
+    private void HighScoreSave()
+    {
+        highScore = PlayerPrefs.GetFloat("HighScore_JumpGame");
+
+        if (highScore <= 0)
+        {
+            highScore = score;
+            PlayerPrefs.SetFloat("HighScore_JumpGame", highScore);
+            highScoreText.text = "HighScore : " + highScore.ToString("N0");
+        }
+        else
+        {
+            if (score > highScore)
+            {
+                highScore = score;
+                PlayerPrefs.SetFloat("HighScore_JumpGame", highScore);
+                highScoreText.text = "HighScore : " + highScore.ToString("N0");
+            }
+            else
+            {
+                highScore = PlayerPrefs.GetFloat("HighScore_JumpGame");
+                highScoreText.text = "HighScore : " + highScore.ToString("N0");
+            }
+        }
+    }
+
+
 }

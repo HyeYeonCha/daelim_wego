@@ -42,6 +42,8 @@ public class GM : MonoBehaviour
     private float term; // 몇 초에 한 번씩 장애물을 생성할지 결정할 변수 (기준점)
     private float currentTime; // 현재 시간을 받아올 변수
 
+    Player _player; // player script를 사용하기 위한 player형 변수
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,7 +56,8 @@ public class GM : MonoBehaviour
         startText.text = "Click !!";
 
         InvokeRepeating("GenerateRuby", 10, 10);
-        
+
+        _player = FindObjectOfType<Player>();
     }
 
     // Update is called once per frame
@@ -75,7 +78,6 @@ public class GM : MonoBehaviour
                 GenerateLightning();
             }
 
-            
         }
         else
         {
@@ -89,8 +91,10 @@ public class GM : MonoBehaviour
         if (time <= 0)
         {
             time = 60;
-            gameOverText.SetActive(true);
             isGameOver = true;
+            gameOverText.SetActive(true);
+            _player.HighScoreSave();
+            
         }
     }
 

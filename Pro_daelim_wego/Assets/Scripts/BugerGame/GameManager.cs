@@ -139,6 +139,7 @@ public class GameManager : MonoBehaviour
             gameOver = true;
             time = 60;
             GameOverImg.SetActive(true);
+            HighScoreSave();
         }
 
     }
@@ -336,4 +337,33 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("BugerGame");
     }
+
+
+    private void HighScoreSave()
+    {
+        highScore = PlayerPrefs.GetFloat("HighScore_BugerGame");
+
+        if (highScore <= 0)
+        {
+            highScore = score;
+            PlayerPrefs.SetFloat("HighScore_BugerGame", highScore);
+            highScoreText.text = "HighScore : " + highScore;
+        }
+        else
+        {
+            if (score > highScore)
+            {
+                highScore = score;
+                PlayerPrefs.SetFloat("HighScore_BugerGame", highScore);
+                highScoreText.text = "HighScore : " + highScore;
+            }
+            else
+            {
+                highScore = PlayerPrefs.GetFloat("HighScore_BugerGame");
+                highScoreText.text = "HighScore : " + highScore;
+            }
+        }
+    }
+
+   
 }

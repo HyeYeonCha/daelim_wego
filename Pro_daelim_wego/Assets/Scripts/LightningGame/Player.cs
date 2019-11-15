@@ -87,6 +87,7 @@ public class Player : MonoBehaviour
             {
                 gm.isGameOver = true;
                 gm.gameOverText.SetActive(true);
+                HighScoreSave();
             }
         }
 
@@ -94,7 +95,7 @@ public class Player : MonoBehaviour
         {
             rubyScore++;
             rubyScoreText.text = " : " + rubyScore;
-            score += 100;
+            score += 150;
             ruby_SFX.Play();
 
             for (int i = 0; i < gm.lightning_list.Count; i++)
@@ -106,6 +107,34 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
+    }
+
+    public void HighScoreSave()
+    {
+        highScore = PlayerPrefs.GetFloat("HighScore_LightningGame");
+        
+        if (highScore <= 0)
+        {
+            highScore = score;
+            
+            PlayerPrefs.SetFloat("HighScore_LightningGame", highScore);
+            highScoreText.text = "HighScore : " + highScore.ToString("N0");
+        }
+        else
+        {
+            if (score > highScore)
+            {
+                highScore = score;
+                
+                PlayerPrefs.SetFloat("HighScore_LightningGame", highScore);
+                highScoreText.text = "HighScore : " + highScore.ToString("N0");
+            }
+            else
+            {
+                highScore = PlayerPrefs.GetFloat("HighScore_LightningGame");
+                highScoreText.text = "HighScore : "+ highScore.ToString("N0");
+            }
+        }
     }
 
 }

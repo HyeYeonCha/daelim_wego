@@ -2198,5 +2198,10 @@ PrefabInstance:
       propertyPath: hp
       value: 
       objectReference: {fileID: 1868979561}
+    - target: {fileID: 7213782918372413026, guid: a9914391735c8124ca1e56710dbc8155,
+        type: 3}
+      propertyPath: highScoreText
+      value: 
+      objectReference: {fileID: 885543695}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9914391735c8124ca1e56710dbc8155, type: 3}
