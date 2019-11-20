@@ -22,20 +22,13 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         toolTip.SetActive(false);
         item = gameObject.GetComponent<Item>();
-        Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        MousPosition = Input.mousePosition;
-        MousPosition = Camera.ScreenToWorldPoint(MousPosition);
-    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         toolTip.SetActive(true);
-        toolTip.transform.position = new Vector2(MousPosition.x-2f, MousPosition.y-2f); // >> 툴팁의 포지션을 마우스 좌표의 옆으로 바꿔주기
+        toolTip.transform.position = new Vector2(gameObject.transform.position.x -1.5f, gameObject.transform.position.y -1.5f); 
         toolTipTextString = "" + item.ItemInfo.itemDesc;
         toolTipTextUI.text = toolTipTextString;
     }

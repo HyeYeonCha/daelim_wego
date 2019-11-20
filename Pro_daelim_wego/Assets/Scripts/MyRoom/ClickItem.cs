@@ -12,9 +12,9 @@ public class ClickItem : MonoBehaviour
     private Canvas canvas;
 
     [SerializeField]
-    private Text Ruby; // 코인 UI
-    [SerializeField]
-    private int rubyCoin; // 코인 갯수
+    private Text rubyCoinUI; // 코인 UI
+    
+    public float rubyCoin; // 코인 갯수
 
     [SerializeField]
     private GameObject myContents; // 구매한 내 아이템
@@ -47,6 +47,8 @@ public class ClickItem : MonoBehaviour
         countMessage.SetActive(false);
         inputCount.characterLimit = 3;
         warningText.SetActive(false);
+
+        rubyCoin = PlayerPrefs.GetFloat("RubyScore");
     }
 
     // Update is called once per frame
@@ -54,13 +56,13 @@ public class ClickItem : MonoBehaviour
     {
         PurchaseItem();
 
-        Ruby.text = " : " + rubyCoin;
+        rubyCoinUI.text = " : " + rubyCoin;
 
         mousePos = Input.mousePosition;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
     }
-   
+   // 아이템 다중 일때 슬롯에 개수 보이도록 수정하기 & Json 파일 형식으로 저장한 후 로드하기
     private void PurchaseItem()
     {
         if (Input.GetMouseButtonDown(1))
@@ -72,6 +74,7 @@ public class ClickItem : MonoBehaviour
                     rubyCoin -= hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
                     myItemClones = Instantiate(hit.collider.gameObject, myContents.transform.position, Quaternion.identity);
                     myItemClones.transform.SetParent(myContents.transform, false);
+                    myItemClones.GetComponent<BoxCollider2D>().enabled = false;
 
                 } else
                 {

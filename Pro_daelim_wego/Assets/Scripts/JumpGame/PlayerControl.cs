@@ -305,6 +305,9 @@ public class PlayerControl : MonoBehaviour
     {
         highScore = PlayerPrefs.GetFloat("HighScore_JumpGame");
 
+        float ruby = PlayerPrefs.GetFloat("RubyScore") + rubyScore;
+        PlayerPrefs.SetFloat("RubyScore", ruby);
+
         if (highScore <= 0)
         {
             highScore = score;

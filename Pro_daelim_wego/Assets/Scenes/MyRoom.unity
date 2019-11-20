@@ -289,7 +289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countMessage: {fileID: 1099745946}
   canvas: {fileID: 1378450961}
-  Ruby: {fileID: 2044646589}
+  rubyCoinUI: {fileID: 2044646589}
   rubyCoin: 10000
   myContents: {fileID: 1974711976}
   warningText: {fileID: 681331925}

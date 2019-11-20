@@ -112,7 +112,10 @@ public class Player : MonoBehaviour
     public void HighScoreSave()
     {
         highScore = PlayerPrefs.GetFloat("HighScore_LightningGame");
-        
+
+        float ruby = PlayerPrefs.GetFloat("RubyScore") + rubyScore;
+        PlayerPrefs.SetFloat("RubyScore", ruby);
+
         if (highScore <= 0)
         {
             highScore = score;
