@@ -70,6 +70,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private AudioSource idleBGM; // 평상시 게임시 나오는 배경음
 
+    void Awake()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Screen.SetResolution(1920, 1080, true);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -88,7 +94,7 @@ public class GameManager : MonoBehaviour
             for (int j = 1; j < 4; j++)
             {
                 GameObject menu = Instantiate(MenuBugerImg[(i - 1) * 3 + j - 1], BugerIngredientsMenu.transform.localPosition + new Vector3(i, j), Quaternion.identity);
-                menu.name = "("+i+","+j+")";
+                menu.name = "(" + i + "," + j + ")";
                 BugerIngredients[i, j] = menu;
                 menu.transform.SetParent(BugerIngredientsMenu.transform);
             }

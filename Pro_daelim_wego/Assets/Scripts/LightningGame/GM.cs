@@ -44,6 +44,12 @@ public class GM : MonoBehaviour
 
     Player _player; // player script를 사용하기 위한 player형 변수
 
+    void Awake()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Screen.SetResolution(1920, 1080, true);
+    }
+
     // Start is called before the first frame update
     void Start()
     {

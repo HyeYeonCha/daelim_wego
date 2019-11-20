@@ -35,6 +35,12 @@ public class ClickItem : MonoBehaviour
     RaycastHit2D hit;
     Vector3 mousePos;
 
+    void Awake()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Screen.SetResolution(1920, 1080, true);
+    }
+
     // Start is called before the first frame update
     void Start()
     {

@@ -58,6 +58,13 @@ public class PlayerControl : MonoBehaviour
     private GameObject burningBG; // 버닝상태일때의 배경
 
     Animator anim;
+
+    void Awake()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Screen.SetResolution(1920, 1080, true);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
