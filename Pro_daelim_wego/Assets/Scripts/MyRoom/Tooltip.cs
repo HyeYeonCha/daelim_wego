@@ -28,7 +28,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         toolTip.SetActive(true);
-        toolTip.transform.position = new Vector2(gameObject.transform.position.x -1.5f, gameObject.transform.position.y -1.5f); 
+        toolTip.transform.position = new Vector2(gameObject.transform.position.x -1.8f, gameObject.transform.position.y -1.8f); 
         toolTipTextString = "" + item.ItemInfo.itemDesc;
         toolTipTextUI.text = toolTipTextString;
     }

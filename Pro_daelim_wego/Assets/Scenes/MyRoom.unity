@@ -295,6 +295,7 @@ MonoBehaviour:
   warningText: {fileID: 681331925}
   buttonText: {fileID: 2063343202}
   inputCount: {fileID: 643502989}
+  itemList: []
 --- !u!4 &124659581
 Transform:
   m_ObjectHideFlags: 0
@@ -4926,7 +4927,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -140, y: -80}
+  m_AnchoredPosition: {x: -200, y: -100}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2063343200
@@ -5139,6 +5140,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1211404720678166039, guid: 3ef8e9b11c402b84d8c1c5145c92e5ae,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ef8e9b11c402b84d8c1c5145c92e5ae, type: 3}
 --- !u!1001 &4141646698210153662
@@ -5268,6 +5274,11 @@ PrefabInstance:
       propertyPath: toolTipTextUI
       value: 
       objectReference: {fileID: 1109214737}
+    - target: {fileID: 1861011045607916636, guid: b6d16041969c71b42be413ce02f5130a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6d16041969c71b42be413ce02f5130a, type: 3}
 --- !u!1001 &5281983490788705804
@@ -5396,6 +5407,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1799066547105754747, guid: 7c524e5dca722154d886531d65f71906,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c524e5dca722154d886531d65f71906, type: 3}

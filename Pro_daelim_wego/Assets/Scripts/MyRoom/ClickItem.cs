@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -33,7 +34,8 @@ public class ClickItem : MonoBehaviour
 
     Ray ray;
     RaycastHit2D hit;
-    Vector3 mousePos;
+
+    public List<string> itemList = new List<string>();
 
     void Awake()
     {
@@ -48,7 +50,7 @@ public class ClickItem : MonoBehaviour
         inputCount.characterLimit = 3;
         warningText.SetActive(false);
 
-        rubyCoin = PlayerPrefs.GetFloat("RubyScore");
+        rubyCoin = PlayerPrefs.GetFloat("RubyScore") + 10000; // Test라 만원 더 넣음.
     }
 
     // Update is called once per frame
@@ -58,11 +60,10 @@ public class ClickItem : MonoBehaviour
 
         rubyCoinUI.text = " : " + rubyCoin;
 
-        mousePos = Input.mousePosition;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
     }
-   // 아이템 다중 일때 슬롯에 개수 보이도록 수정하기 & Json 파일 형식으로 저장한 후 로드하기
+   
     private void PurchaseItem()
     {
         if (Input.GetMouseButtonDown(1))
@@ -72,11 +73,19 @@ public class ClickItem : MonoBehaviour
                 if(rubyCoin - hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost >= 0)
                 {
                     rubyCoin -= hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
-                    myItemClones = Instantiate(hit.collider.gameObject, myContents.transform.position, Quaternion.identity);
-                    myItemClones.transform.SetParent(myContents.transform, false);
-                    myItemClones.GetComponent<BoxCollider2D>().enabled = false;
 
-                } else
+                    Slot.instance.ItemAdd(hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemName);
+                    myItemClones = Instantiate(hit.collider.gameObject, myContents.transform.position, Quaternion.identity);
+
+                    if (!Slot.instance.removeFlag)
+                    {
+                        myItemClones = Instantiate(hit.collider.gameObject, myContents.transform.position, Quaternion.identity);
+                        myItemClones.transform.SetParent(myContents.transform, false);
+                        myItemClones.GetComponent<BoxCollider2D>().enabled = false;
+                    }
+                    
+                }
+                else
                 {
                     warningText.SetActive(true);
                     StartCoroutine(WarningTextFalse());
@@ -92,6 +101,7 @@ public class ClickItem : MonoBehaviour
                 Destroy(myItemClones);
                 multiplePrice = hit.collider.gameObject.GetComponent<Item>().ItemInfo.itemCost;
                 multipleItem = hit.collider.gameObject;
+                
                 countMessage.SetActive(true);
                 buttonText.text = "'" + hit.collider.gameObject.name + "' 아이템 구매?";
             }
@@ -112,12 +122,22 @@ public class ClickItem : MonoBehaviour
             if(rubyCoin - multiplePrice * _count >= 0)
             {
                 rubyCoin -= multiplePrice * _count;
-                for (int i = 0; i < _count; i++)
+
+                //for (int i = 0; i < _count; i++)
+                //{
+                //    GameObject myItemClones = Instantiate(multipleItem, myContents.transform.position, Quaternion.identity);
+                //    myItemClones.transform.SetParent(myContents.transform, false);
+                //}
+                Slot.instance.ItemAdd(multipleItem.GetComponent<Item>().ItemInfo.itemName, _count);
+
+                if (!Slot.instance.removeFlag)
                 {
                     GameObject myItemClones = Instantiate(multipleItem, myContents.transform.position, Quaternion.identity);
                     myItemClones.transform.SetParent(myContents.transform, false);
-                }
+                } 
+                
                 countMessage.SetActive(false);
+
             } else
             {
                 warningText.SetActive(true);
